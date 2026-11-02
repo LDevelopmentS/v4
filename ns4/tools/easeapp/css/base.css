@@ -1,0 +1,123 @@
+/* Tokens + reset. Change colors and sizes here only. */
+:root {
+  /* ---- Colors: dark theme (default). The light theme overrides these in the block below. ---- */
+  color-scheme: dark;
+  --bg: #000;              /* page */
+  --ink: #0d0d0d;         /* raised surface (groups, dialogs) */
+  --field: #000;          /* inside text fields, switches and pickers */
+  --rail-bg: #000;        /* sidebar */
+  --line: #262626;
+  --line-hover: #3a3a3a;  /* field border on hover */
+  --btn-line: #4a4a4a;    /* neutral button border */
+  --text: #f2f2f2;
+  --text-soft: #bdbdbd;   /* option labels, clone names */
+  --muted: #8c8c8c;
+  --placeholder: #707070;
+  --yellow: #d62839;      /* Christmas red (was the Ease yellow): fills, bars, borders */
+  --xmas-green: #3fb273;  /* Christmas green: secondary accent (sidebar edge, title, candy stripe) */
+  --yellow-ink: #ff6b6b;  /* accent used as text; darkened in the light theme so it can be read on white */
+  --yellow-soft: rgba(214, 40, 57, .18);
+  --focus: #ff8a8a;       /* keyboard focus ring */
+  --on-accent: #fff;      /* text and checks that sit on an accent (or brand-color) fill */
+  --danger: #ff5c4d;
+  --danger-soft: rgba(255, 92, 77, .14);
+  --on-danger: #000;      /* text on a solid red button */
+  --report-bg: #151515;
+  --clone-bg: #161616;
+  --clone-bg-hover: #1e1e1e;
+  --sk-base: #161616;     /* loading skeleton */
+  --sk-hi: #242424;
+  --sk-report-base: #1f1f1f;
+  --sk-report-hi: #2d2d2d;
+  --scrim: rgba(0, 0, 0, .45);        /* blur backdrop behind the open sidebar */
+  --scrim-modal: rgba(0, 0, 0, .6);
+  --shadow-modal: 0 24px 60px rgba(0, 0, 0, .7);
+  /* Network brand colors are lightened on dark so black ones (TikTok, Threads) stay visible */
+  --brand-mix: #fff;
+  --brand-pct: 75%;
+  --net-ink: #000;        /* text on a lit network tile */
+
+  --rail-w: 64px;
+  --min-form: 420px;   /* smallest the form can be dragged to */
+  --min-report: 320px; /* smallest the report can be dragged to */
+  --handle-w: 12px;    /* width of the draggable divider */
+  --rail-w-open: 248px;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+
+  --font: "Bahnschrift", "DIN Alternate", "Franklin Gothic Medium", "Arial Narrow", system-ui, sans-serif;
+}
+
+/* ---- Light theme: neutral white surfaces, near-black ink, the same yellow. The "theme-light" class is set on <html> before first paint
+   by js/theme-boot.js (and toggled by the sun button in the sidebar). Only colors change here.
+   Greys are neutral (no cream or brown tint): warm-tinted screens (night light, older or uncalibrated displays) add their own
+   warmth, and a tinted palette on top of that turns muddy yellow and makes dark text look washed out. ---- */
+html.theme-light {
+  color-scheme: light;
+  --bg: #f4f4f3;
+  --ink: #fff;
+  --field: #fff;
+  --rail-bg: #fff;
+  --line: #d6d6d3;
+  --line-hover: #b0b0ac;
+  --btn-line: #9c9c98;
+  --text: #050505;
+  --text-soft: #262626;
+  --muted: #4d4d4d;      /* 7:1 or better on the page and surfaces */
+  --placeholder: #707070;
+  --yellow: #c62828;
+  --xmas-green: #146c43;
+  --yellow-ink: #a31616;  /* deep red: 6:1 or better on the light surfaces */
+  --yellow-soft: rgba(198, 40, 40, .12);
+  --focus: #a31616;
+  --on-accent: #fff;
+  --danger: #b3261e;
+  --danger-soft: rgba(179, 38, 30, .1);
+  --on-danger: #fff;
+  --report-bg: #fff;
+  --clone-bg: #ebebe9;
+  --clone-bg-hover: #e0e0dd;
+  --sk-base: #e8e8e6;
+  --sk-hi: #f6f6f5;
+  --sk-report-base: #ececea;
+  --sk-report-hi: #f9f9f8;
+  --scrim: rgba(0, 0, 0, .25);
+  --scrim-modal: rgba(0, 0, 0, .4);
+  --shadow-modal: 0 24px 60px rgba(0, 0, 0, .22);
+  /* On light, brand colors are used at full strength (a touch deeper) with white text */
+  --brand-mix: #000;
+  --brand-pct: 88%;
+  --net-ink: #fff;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+[x-cloak] { display: none !important; }
+
+/* Visible to screen readers only */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
+}
