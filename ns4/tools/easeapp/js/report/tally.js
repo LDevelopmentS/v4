@@ -40,7 +40,9 @@ export function buildTally({ reportType, isNull, progFinding, progFindingText, r
   } else if (reportType === 'progressive') {
     if (relatives.found === true && relatives.progFindings) {
       for (const pf of relatives.progFindings) {
-        if (pf.type === 'relevant') tally.hasGlobalRH = true;
+        // Only a finding marked "Findings" counts; text typed under "No findings found" is ignored
+        if (pf.type !== 'relevant') continue;
+        tally.hasGlobalRH = true;
         if (pf.text && pf.text.trim() !== '') relProgTexts.push(pf.text.trim());
       }
     }
@@ -48,9 +50,9 @@ export function buildTally({ reportType, isNull, progFinding, progFindingText, r
 
   // Progressive: the Findings section (one choice and one text for the whole report). It feeds the FIRST bullet only.
   // Its text counts only when "Findings" is chosen; "No findings found" ignores whatever is typed.
-  // (The relatives' findings texts are kept in relProgTexts for the last bullet; they count whatever their radio says.)
+  // "Findings" here (like a relatives finding marked "Findings") also switches the last bullet to its findings wording.
   const progText = reportType === 'progressive' && progFinding === 'relevant' ? (progFindingText ?? '').trim() : '';
-  if (reportType === 'progressive' && progFinding === 'relevant') tally.hasNetworkRH = true;
+  if (reportType === 'progressive' && progFinding === 'relevant') { tally.hasNetworkRH = true; tally.hasGlobalRH = true; }
 
   // Networks, in sidebar order
   for (const net of config) {
