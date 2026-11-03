@@ -18,10 +18,12 @@ export const relativesProgressive = ({ relatives: rel }) => {
   const names = joinList(rows.map((r) => nameHtml(r.name, r.link, { withSite: true })));
   let text = `${base} and ${rows.length} ${verb} identified: ${names}. `;
 
-  const findings = rel.progFindings.map((f) => (f.text || '').trim()).filter(Boolean).map(escapeHtml);
+  // Only findings marked "Findings" count; text typed under "No findings found" is ignored
+  const marked = rel.progFindings.filter((f) => f.type === 'relevant');
+  const findings = marked.map((f) => (f.text || '').trim()).filter(Boolean).map(escapeHtml);
   if (findings.length > 0) {
     text += `<strong>${noun} thoroughly investigated and ${stitch(findings)}</strong>`;
-  } else if (rel.progFindings.some((f) => f.type === 'relevant')) {
+  } else if (marked.length > 0) {
     text += `<strong>${noun} thoroughly investigated and (state relevant info found on relatives)</strong>`;
   } else {
     text += `${noun} thoroughly investigated and no apparent relevant information regarding the case was found on ${pronoun} at this time.`;

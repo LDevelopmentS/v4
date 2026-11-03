@@ -19,9 +19,9 @@ export const progressiveSummation = (state) => {
   const noRH = `no apparent relevant information regarding the party’s accident on [Date] was found at this time, nor were any social media posts pertaining to ${poss} injuries, treatment, or activities.`;
 
   const { tally: t, progressive: p, relProgTexts } = buildTally(state);
-  // How the closing sentence ends: the text typed in the Relatives findings boxes (whatever their radio says),
-  // else a placeholder if one of them is marked "Findings", else "no relevant info".
-  // The main Findings section does not feed this bullet.
+  // How the closing sentence ends. If either the Findings section or a relatives finding is marked "Findings" it uses the
+  // findings wording: the text typed in the relatives findings marked "Findings", else a placeholder. Otherwise "no relevant info".
+  // Text typed under "No findings found" is ignored.
   const ending = relProgTexts.length ? stitch(relProgTexts.map(escapeHtml))
     : t.hasGlobalRH ? '(state what was found/not found).' : noRH;
   const social = t.personalCount + t.possibleSocialCount;
