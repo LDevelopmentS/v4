@@ -1,10 +1,10 @@
 // Progressive report, bullet 1: the intro, then what was found.
 //   Null report: "No social media accounts were found for the party at this time."
-//   Otherwise a sentence that names where accounts were found, then the findings typed on the networks:
+//   Otherwise a sentence that names where accounts were found, then, if "Findings" is chosen in the Findings section, a bold placeholder:
 //     "Social media accounts for the party were found on Facebook and X (Twitter); he was also found to have a public photo
-//      on Poshmark and a business page on Yelp, as well as Google search results. <bold findings>"
+//      on Poshmark and a business page on Yelp, as well as Google search results. (state RH in bold, if any)"
 import { buildTally } from '../tally.js';
-import { escapeHtml, joinList, stitch } from '../helpers/text.js';
+import { escapeHtml, joinList } from '../helpers/text.js';
 import { publicPhrase } from '../helpers/public-media.js';
 
 export const name = 'progressive-intro';
@@ -57,13 +57,11 @@ function accountsSentence(p, he) {
 export const progressiveIntro = (state) => {
   if (state.isNull) return INTRO + NULL_SENTENCE;
 
-  const { tally, progressive, allProgTexts } = buildTally(state);
+  const { tally, progressive } = buildTally(state);
   const he = state.subjectGender === 'male' ? 'he' : 'she';
   let text = `${INTRO} ${accountsSentence(progressive, he)}`;
 
-  // What was found on the networks, in bold (typed in "Progressive findings")
-  const findings = allProgTexts.map(escapeHtml);
-  if (findings.length > 0) text += ` <strong>${stitch(findings)}</strong>`;
-  else if (tally.hasNetworkRH) text += ' <strong>(state RH in bold, if any)</strong>';
+  // Findings were marked in the Findings section: a placeholder for the writer to fill in
+  if (tally.hasNetworkRH) text += ' <strong>(state RH in bold, if any)</strong>';
   return text;
 };
