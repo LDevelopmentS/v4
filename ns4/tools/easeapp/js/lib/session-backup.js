@@ -49,7 +49,7 @@ export function readBackup() {
 export function takeSnapshot(Alpine) {
   const f = Alpine.store('form');
   return {
-    form: clone({ reportType: f.reportType, isNull: f.isNull, progFinding: f.progFinding, subjectGender: f.subjectGender, relatives: f.relatives }),
+    form: clone({ reportType: f.reportType, isNull: f.isNull, progFinding: f.progFinding, progFindingText: f.progFindingText, subjectGender: f.subjectGender, relatives: f.relatives }),
     networks: clone(Alpine.store('networks').byId),
     activeSection: Alpine.store('app').activeSection,
   };

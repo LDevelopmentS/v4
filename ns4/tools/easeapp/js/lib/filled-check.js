@@ -28,6 +28,6 @@ export function hasText(node) {
   return false;
 }
 
-// The form store's only typed text is in `relatives`; the rest of it is choices. Everything else is in the networks store.
+// The form store's typed text is in `relatives` and the Findings text; the rest of it is choices. Everything else is in the networks store.
 export const isFormFilled = (Alpine) =>
-  hasText(Alpine.store('form').relatives) || hasText(Alpine.store('networks').byId);
+  hasText(Alpine.store('form').relatives) || hasText(Alpine.store('form').progFindingText) || hasText(Alpine.store('networks').byId);
