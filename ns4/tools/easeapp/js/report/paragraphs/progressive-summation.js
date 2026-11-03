@@ -7,7 +7,7 @@
 // A Null report says the party did not appear to have any personal social media;
 //   with search results only: "..., however, he/she was found to have Google search results."
 import { buildTally } from '../tally.js';
-import { escapeHtml, joinList, stitch } from '../helpers/text.js';
+import { joinList } from '../helpers/text.js';
 import { publicPhrase } from '../helpers/public-media.js';
 
 export const name = 'progressive-summation';
@@ -18,12 +18,10 @@ export const progressiveSummation = (state) => {
   const poss = state.subjectGender === 'male' ? 'his' : 'her';
   const noRH = `no apparent relevant information regarding the party’s accident on [Date] was found at this time, nor were any social media posts pertaining to ${poss} injuries, treatment, or activities.`;
 
-  const { tally: t, progressive: p, relProgTexts } = buildTally(state);
-  // How the closing sentence ends. If either the Findings section or a relatives finding is marked "Findings" it uses the
-  // findings wording: the text typed in the relatives findings marked "Findings", else a placeholder. Otherwise "no relevant info".
-  // Text typed under "No findings found" is ignored.
-  const ending = relProgTexts.length ? stitch(relProgTexts.map(escapeHtml))
-    : t.hasGlobalRH ? '(state what was found/not found).' : noRH;
+  const { tally: t, progressive: p } = buildTally(state);
+  // How the closing sentence ends: if the Findings section OR any findings subsection (under Relatives) is set to
+  // "Findings", it is always the placeholder below (never the text typed in either); otherwise the "no relevant info" line.
+  const ending = t.hasGlobalRH ? '(state what was found/not found).' : noRH;
   const social = t.personalCount + t.possibleSocialCount;
 
   // Strict order: accounts, personal pages, business pages, Mugshots, business websites, public posts/photos/videos, Google.
