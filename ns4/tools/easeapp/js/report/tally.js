@@ -3,7 +3,6 @@
 import { networks as config } from '../config/networks.js';
 import { pseText } from './networks/google/pse-names.js';
 import { nullOff } from '../config/null-mode.js';
-import { stitch } from './helpers/text.js';
 
 const isPublic = (data) => data.accountType === 'no-page'; // shown as "Public" in the form
 
@@ -47,13 +46,11 @@ export function buildTally({ reportType, isNull, progFinding, progFindingText, r
     }
   }
 
-  // Progressive: the Findings section (one choice and one text for the whole report).
-  // Text typed there counts as findings even if the radio was left on "No findings found".
-  // If that box is empty, the text typed in the Relatives "Progressive findings" boxes is used instead,
-  // so the first and last bullets never show a placeholder when findings text exists anywhere.
-  const topText = reportType === 'progressive' ? (progFindingText ?? '').trim() : '';
-  const progText = topText || (relProgTexts.length ? stitch(relProgTexts) : '');
-  if (reportType === 'progressive' && (progFinding === 'relevant' || progText)) { tally.hasGlobalRH = true; tally.hasNetworkRH = true; }
+  // Progressive: the Findings section (one choice and one text for the whole report). It feeds the FIRST bullet only.
+  // Its text counts only when "Findings" is chosen; "No findings found" ignores whatever is typed.
+  // (The relatives' findings texts are kept in relProgTexts for the last bullet; they count whatever their radio says.)
+  const progText = reportType === 'progressive' && progFinding === 'relevant' ? (progFindingText ?? '').trim() : '';
+  if (reportType === 'progressive' && progFinding === 'relevant') tally.hasNetworkRH = true;
 
   // Networks, in sidebar order
   for (const net of config) {
