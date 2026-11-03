@@ -9,7 +9,7 @@ const isPublic = (data) => data.accountType === 'no-page'; // shown as "Public" 
 // 'public photo/s' -> 'photo' (anything unknown counts as a post)
 const mediaKind = (text) => (/photo/i.test(text ?? '') ? 'photo' : /video/i.test(text ?? '') ? 'video' : 'post');
 
-export function buildTally({ reportType, isNull, progFinding, relatives, networks: state = {} }) {
+export function buildTally({ reportType, isNull, progFinding, progFindingText, relatives, networks: state = {} }) {
   const tally = {
     personalCount: 0,         // personal accounts (matched)
     personalPageCount: 0,     // personal pages (including ones found through search engines)
@@ -46,8 +46,10 @@ export function buildTally({ reportType, isNull, progFinding, relatives, network
     }
   }
 
-  // Progressive: the Findings section (one choice for the whole report)
-  if (reportType === 'progressive' && progFinding === 'relevant') { tally.hasGlobalRH = true; tally.hasNetworkRH = true; }
+  // Progressive: the Findings section (one choice and one text for the whole report).
+  // Text typed there counts as findings even if the radio was left on "No findings found".
+  const progText = reportType === 'progressive' ? (progFindingText ?? '').trim() : '';
+  if (reportType === 'progressive' && (progFinding === 'relevant' || progText)) { tally.hasGlobalRH = true; tally.hasNetworkRH = true; }
 
   // Networks, in sidebar order
   for (const net of config) {
@@ -116,5 +118,5 @@ export function buildTally({ reportType, isNull, progFinding, relatives, network
     }
   }
 
-  return { tally, progressive, relProgTexts };
+  return { tally, progressive, progText, relProgTexts };
 }
