@@ -49,7 +49,7 @@ export function readBackup() {
 export function takeSnapshot(Alpine) {
   const f = Alpine.store('form');
   return {
-    form: clone({ reportType: f.reportType, isNull: f.isNull, subjectGender: f.subjectGender, relatives: f.relatives }),
+    form: clone({ reportType: f.reportType, isNull: f.isNull, progFinding: f.progFinding, subjectGender: f.subjectGender, relatives: f.relatives }),
     networks: clone(Alpine.store('networks').byId),
     activeSection: Alpine.store('app').activeSection,
   };
@@ -57,9 +57,9 @@ export function takeSnapshot(Alpine) {
 
 // A short signature of the form's structure (switches, accounts, rows, metrics). When it changes we save at once instead of waiting.
 export const structureOf = (s) => JSON.stringify([
-  s.form.isNull, s.form.relatives.found, s.form.relatives.rows?.length, s.form.relatives.progFindings?.length,
+  s.form.isNull, s.form.progFinding, s.form.relatives.found, s.form.relatives.rows?.length, s.form.relatives.progFindings?.length,
   Object.entries(s.networks).map(([id, n]) => [id, n.checked, n.instances?.length,
-    (n.instances || []).map((i) => [i.extraMetrics?.length, i.hiddenMetrics?.length, i.progFindings?.length])]),
+    (n.instances || []).map((i) => [i.extraMetrics?.length, i.hiddenMetrics?.length])]),
 ]);
 
 // ---------- is it worth keeping?
