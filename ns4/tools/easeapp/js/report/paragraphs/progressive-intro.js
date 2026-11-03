@@ -1,8 +1,8 @@
 // Progressive report, bullet 1: the intro, then what was found.
 //   Null report: "No social media accounts were found for the party at this time."
-//   Otherwise a sentence that names where accounts were found, then, if "Findings" is chosen in the Findings section, a bold placeholder:
+//   Otherwise a sentence that names where accounts were found, then the text typed in the Findings section (bold), or a bold placeholder if "Findings" is chosen with no text:
 //     "Social media accounts for the party were found on Facebook and X (Twitter); he was also found to have a public photo
-//      on Poshmark and a business page on Yelp, as well as Google search results. (state RH in bold, if any)"
+//      on Poshmark and a business page on Yelp, as well as Google search results. <bold findings text>"
 import { buildTally } from '../tally.js';
 import { escapeHtml, joinList } from '../helpers/text.js';
 import { publicPhrase } from '../helpers/public-media.js';
@@ -55,13 +55,14 @@ function accountsSentence(p, he) {
 }
 
 export const progressiveIntro = (state) => {
-  if (state.isNull) return INTRO + NULL_SENTENCE;
+  const { tally, progressive, progText } = buildTally(state);
+  if (state.isNull) return INTRO + NULL_SENTENCE + (progText ? ` <strong>${escapeHtml(progText)}</strong>` : '');
 
-  const { tally, progressive } = buildTally(state);
   const he = state.subjectGender === 'male' ? 'he' : 'she';
   let text = `${INTRO} ${accountsSentence(progressive, he)}`;
 
-  // Findings were marked in the Findings section: a placeholder for the writer to fill in
-  if (tally.hasNetworkRH) text += ' <strong>(state RH in bold, if any)</strong>';
+  // The Findings section: its text in bold, or a placeholder when "Findings" is chosen but nothing is typed
+  if (progText) text += ` <strong>${escapeHtml(progText)}</strong>`;
+  else if (tally.hasNetworkRH) text += ' <strong>(state RH in bold, if any)</strong>';
   return text;
 };
