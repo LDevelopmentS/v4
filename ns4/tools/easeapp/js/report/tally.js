@@ -9,7 +9,7 @@ const isPublic = (data) => data.accountType === 'no-page'; // shown as "Public" 
 // 'public photo/s' -> 'photo' (anything unknown counts as a post)
 const mediaKind = (text) => (/photo/i.test(text ?? '') ? 'photo' : /video/i.test(text ?? '') ? 'video' : 'post');
 
-export function buildTally({ reportType, isNull, relatives, networks: state = {} }) {
+export function buildTally({ reportType, isNull, progFinding, relatives, networks: state = {} }) {
   const tally = {
     personalCount: 0,         // personal accounts (matched)
     personalPageCount: 0,     // personal pages (including ones found through search engines)
@@ -32,7 +32,6 @@ export function buildTally({ reportType, isNull, relatives, networks: state = {}
   // (Names are the network, or the search engines for Google. Business pages and websites are kept apart.
   //  mentions: one { net, media } for each Public account, media being post, photo or video.)
   const progressive = { personalNets: [], personalPageNets: [], businessNets: [], websiteNets: [], mentions: [], mugshots: 0, google: false };
-  const allProgTexts = []; // Progressive findings typed on networks
   const relProgTexts = []; // ...and on relatives
 
   // Relatives
@@ -47,6 +46,9 @@ export function buildTally({ reportType, isNull, relatives, networks: state = {}
     }
   }
 
+  // Progressive: the Findings section (one choice for the whole report)
+  if (reportType === 'progressive' && progFinding === 'relevant') { tally.hasGlobalRH = true; tally.hasNetworkRH = true; }
+
   // Networks, in sidebar order
   for (const net of config) {
     const st = state[net.id];
@@ -57,11 +59,6 @@ export function buildTally({ reportType, isNull, relatives, networks: state = {}
       // Relevant information
       if (reportType === 'plus') {
         if (data.finding === 'relevant') { tally.hasGlobalRH = true; tally.hasNetworkRH = true; }
-      } else if (reportType === 'progressive' && data.progFindings) {
-        for (const pf of data.progFindings) {
-          if (pf.type === 'relevant') { tally.hasGlobalRH = true; tally.hasNetworkRH = true; }
-          if (pf.text && pf.text.trim() !== '') allProgTexts.push(pf.text.trim());
-        }
       }
 
       if (net.id === 'goog') {
@@ -119,5 +116,5 @@ export function buildTally({ reportType, isNull, relatives, networks: state = {}
     }
   }
 
-  return { tally, progressive, allProgTexts, relProgTexts };
+  return { tally, progressive, relProgTexts };
 }
