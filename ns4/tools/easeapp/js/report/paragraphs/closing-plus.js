@@ -28,7 +28,7 @@ function foundPhrases(t) {
 }
 
 export const closingPlus = (state) => {
-  const { tally: t, allProgTexts } = buildTally(state);
+  const { tally: t } = buildTally(state);
   const parts = foundPhrases(t);
   let list = joinList(parts);
 
@@ -40,9 +40,7 @@ export const closingPlus = (state) => {
   // Whether relevant information was found anywhere
   const relevant = () => {
     if (!t.hasGlobalRH) return 'no apparent relevant information regarding the case was found at this time.';
-    return allProgTexts.length > 0
-      ? '<strong>relevant information regarding the case was found.</strong>'
-      : '(state the relevant information).';
+    return '(state the relevant information).';
   };
 
   if (state.isNull) {
