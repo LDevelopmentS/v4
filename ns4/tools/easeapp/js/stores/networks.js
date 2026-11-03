@@ -2,7 +2,6 @@
 // Every instance has the same shape, so cloning later only adds and removes instances.
 import { uid } from '../lib/uid.js';
 import { networks as config } from '../config/networks.js';
-import { newFinding } from './form.js';
 
 export const name = 'networks-store';
 
@@ -24,7 +23,6 @@ export const newInstance = () => ({
   actDetails: '',
   finding: 'relevant',               // 'relevant' | 'none'
   mediaType: '',                     // the relevant info text
-  progFindings: [newFinding()],      // Progressive only
 });
 
 // "Other social medias" has its own shape: a kind of account, a free-text location, and a few extra details.
@@ -52,7 +50,6 @@ export const newGoogleInstance = () => ({
   mediaType: '',
   accountType: 'personal',           // 'personal' | 'personal-page' | 'business-page' | 'business-website' | 'no-page' (shown as "Public"); more kinds: see config/hierarchy.js
   mentionMedia: 'public post/s',
-  progFindings: [newFinding()],
 });
 
 // A blank account in the shape each network uses

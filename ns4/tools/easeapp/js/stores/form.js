@@ -10,6 +10,7 @@ export const newFinding = () => ({ id: uid(), type: 'none', text: '' });
 export const defaults = () => ({
   reportType: 'plus',     // 'plus' | 'progressive'
   isNull: false,
+  progFinding: 'none',    // Progressive only: 'none' | 'relevant' (the Findings section)
   subjectGender: 'male',  // 'male' | 'female'
   relatives: {
     found: null,          // true = Yes, false = No, null = not answered yet

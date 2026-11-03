@@ -11,6 +11,7 @@ export function register(Alpine) {
       return buildEntries({
         reportType: form.reportType,
         isNull: form.isNull,
+        progFinding: form.progFinding,
         subjectGender: form.subjectGender,
         relatives: form.relatives,
         networks: Alpine.store('networks').byId,
