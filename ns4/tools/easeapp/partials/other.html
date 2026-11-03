@@ -163,23 +163,6 @@
 
   </div>
 
-  <!-- Progressive report -->
-  <fieldset class="fieldset" x-show="!isPlus">
-    <legend>Progressive findings</legend>
-    <div class="stack">
-      <template x-for="(f, i) in d.progFindings" :key="f.id">
-        <fieldset class="fieldset fieldset--compact">
-          <legend x-text="'Finding ' + (i + 1)"></legend>
-          <div class="stack">
-            <div class="choice-group">
-              <label class="choice"><input type="radio" :name="'other-pfind-' + f.id" value="none" x-model="f.type"> No findings found</label>
-              <label class="choice"><input type="radio" :name="'other-pfind-' + f.id" value="relevant" x-model="f.type"> Findings</label>
-            </div>
-            <textarea class="input" placeholder="Enter findings or text details here..." x-model="f.text"></textarea>
-            <button type="button" class="btn btn--ghost btn--danger" @click="removeFinding(i)"
-                    x-show="d.progFindings.length > 1">&minus; Remove this finding</button>
-          </div>
-        </fieldset>
       </template>
       <button type="button" class="btn btn--add" @click="addFinding()">+ Add another finding field</button>
     </div>
