@@ -21,6 +21,7 @@ export async function buildForm(root, sections, load = fetchText) {
     details.id = `section-${s.id}`;
     details.setAttribute('x-bind:open', `isOpen('${s.id}')`);
     details.setAttribute('x-on:toggle', `onToggle('${s.id}', $event)`);
+    if (s.show) details.setAttribute('x-show', s.show);
     if (s.network) {
       // Only visible while the network is switched on; the marker bar takes the brand color.
       details.classList.add('section--brand');
