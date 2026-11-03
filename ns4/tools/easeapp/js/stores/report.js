@@ -12,6 +12,7 @@ export function register(Alpine) {
         reportType: form.reportType,
         isNull: form.isNull,
         progFinding: form.progFinding,
+        progFindingText: form.progFindingText,
         subjectGender: form.subjectGender,
         relatives: form.relatives,
         networks: Alpine.store('networks').byId,
