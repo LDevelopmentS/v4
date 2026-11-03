@@ -3,7 +3,6 @@
 import { getOtherType } from '../config/other-types.js';
 import { metricCatalog, getCatalogMetric } from '../config/metric-catalog.js';
 import { uid } from '../lib/uid.js';
-import { newFinding } from '../stores/form.js';
 
 export const name = 'other-section';
 
@@ -47,7 +46,5 @@ export function register(Alpine) {
       if (i !== -1) this.d.extraMetrics.splice(i, 1);
     },
 
-    addFinding() { this.d.progFindings.push(newFinding()); },
-    removeFinding(index) { if (this.d.progFindings.length > 1) this.d.progFindings.splice(index, 1); },
   }));
 }

@@ -1,7 +1,6 @@
 // Logic for a network's section in the form (partials/network.html, shared by every generic network).
 // Shows the active account (instance) of the network.
 import { getNetwork } from '../config/networks.js';
-import { newFinding } from '../stores/form.js';
 
 export const name = 'network-section';
 
@@ -21,7 +20,5 @@ export function register(Alpine) {
     activityDatePlaceholder() { return this.netId === 'pin' ? 'Year (e.g. 2023)' : 'Date (Month Day, Year)'; },
     activityActionPlaceholder() { return this.netId === 'yt' ? 'Action (e.g., posted a video)' : 'Action (e.g., shared a photo)'; },
 
-    addFinding() { this.d.progFindings.push(newFinding()); },
-    removeFinding(index) { if (this.d.progFindings.length > 1) this.d.progFindings.splice(index, 1); },
   }));
 }
