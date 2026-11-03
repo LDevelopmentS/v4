@@ -7,7 +7,7 @@
 // A Null report says the party did not appear to have any personal social media;
 //   with search results only: "..., however, he/she was found to have Google search results."
 import { buildTally } from '../tally.js';
-import { escapeHtml, joinList } from '../helpers/text.js';
+import { escapeHtml, joinList, stitch } from '../helpers/text.js';
 import { publicPhrase } from '../helpers/public-media.js';
 
 export const name = 'progressive-summation';
@@ -18,9 +18,12 @@ export const progressiveSummation = (state) => {
   const poss = state.subjectGender === 'male' ? 'his' : 'her';
   const noRH = `no apparent relevant information regarding the party’s accident on [Date] was found at this time, nor were any social media posts pertaining to ${poss} injuries, treatment, or activities.`;
 
-  const { tally: t, progressive: p, progText } = buildTally(state);
-  // How the closing sentence ends: the Findings text, else a placeholder if findings were marked, else "no relevant info"
-  const findingsEnd = progText ? escapeHtml(progText) : '(state what was found/not found).';
+  const { tally: t, progressive: p, relProgTexts } = buildTally(state);
+  // How the closing sentence ends: the text typed in the Relatives findings boxes (whatever their radio says),
+  // else a placeholder if one of them is marked "Findings", else "no relevant info".
+  // The main Findings section does not feed this bullet.
+  const ending = relProgTexts.length ? stitch(relProgTexts.map(escapeHtml))
+    : t.hasGlobalRH ? '(state what was found/not found).' : noRH;
   const social = t.personalCount + t.possibleSocialCount;
 
   // Strict order: accounts, personal pages, business pages, Mugshots, business websites, public posts/photos/videos, Google.
@@ -43,16 +46,15 @@ export const progressiveSummation = (state) => {
   // Null report: no accounts. With nothing else found it says so; with search results (or other finds) it adds "however, ..."
   if (state.isNull) {
     if (items.length === 0) {
-      return `<strong>In summation, the party did not appear to have any forms of personal social media. After a thorough investigation, ${progText ? findingsEnd : noRH}</strong>`;
+      return `<strong>In summation, the party did not appear to have any forms of personal social media. After a thorough investigation, ${ending}</strong>`;
     }
     const he = state.subjectGender === 'male' ? 'he' : 'she';
     const found = joinList(items.map(([text]) => text));
-    return `<strong>In summation, the party did not appear to have any forms of personal social media; however, ${he} was found to have ${found}. After a thorough investigation, ${t.hasGlobalRH ? findingsEnd : noRH}</strong>`;
+    return `<strong>In summation, the party did not appear to have any forms of personal social media; however, ${he} was found to have ${found}. After a thorough investigation, ${ending}</strong>`;
   }
 
   const units = items.reduce((sum, [, n]) => sum + n, 0);
   const list = joinList(items.map(([text]) => text)) || 'no accounts';
   const verb = units === 1 ? 'was' : 'were';
-  const ending = t.hasGlobalRH ? findingsEnd : noRH;
   return `<strong>In summation, ${list} ${verb} identified for the party. After a thorough investigation, ${ending}</strong>`;
 };
