@@ -31,7 +31,7 @@
 <body class="is-loading" aria-busy="true">
 
   <aside class="rail" aria-label="Site and networks">
-    <a class="rail__brand" href="https://nstoolkits.site/veee3/">
+    <a class="rail__brand" href="https://nstoolkits.site/ns4/main/">
       <span class="rail__mark" aria-hidden="true"><img src="img/ease-logo-christmas.png" alt="" width="160" height="134"></span>
       <span class="rail__label rail__title">Ease <span class="rail__title-accent">App</span></span>
     </a>
@@ -115,7 +115,7 @@
 
     <nav class="rail__group rail__group--links" aria-label="Site">
       <ul class="rail__list">
-        <li><a class="rail__link" href="https://nstoolkits.site/ns4/"><span class="rail__glyph" aria-hidden="true">H</span><span class="rail__label">Home</span></a></li>
+        <li><a class="rail__link" href="https://nstoolkits.site/ns4/main"><span class="rail__glyph" aria-hidden="true">H</span><span class="rail__label">Home</span></a></li>
         <li><a class="rail__link" href="https://nstoolkits.site/nsv3/about.html"><span class="rail__glyph" aria-hidden="true">A</span><span class="rail__label">About us</span></a></li>
         <li><a class="rail__link" href="https://nstoolkits.site/nsv3/download.html"><span class="rail__glyph" aria-hidden="true">D</span><span class="rail__label">Download</span></a></li>
         <li><a class="rail__link" href="https://nstoolkits.site/"><span class="rail__glyph" aria-hidden="true">V2</span><span class="rail__label">Version 2</span></a></li>
@@ -194,24 +194,5 @@
       <button type="button" class="btn btn--primary" data-modal="restore" autofocus>Restore</button>
     </div>
   </dialog>
-    <script>
-        document.addEventListener("keydown", function(e) {
-            if (e.keyCode === 123 || 
-                (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || 
-                (e.ctrlKey && e.keyCode === 85) ||
-                (e.ctrlKey && (e.key === "a" || e.key === "A"))) {
-                e.preventDefault();
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && e.key === "C") {
-                e.preventDefault();
-            }
-        });
-
-        document.addEventListener("contextmenu", e => e.preventDefault());
-        document.addEventListener("selectstart", e => e.preventDefault());
-        document.addEventListener("dragstart", e => e.preventDefault());
-
-    </script>
 </body>
 </html>
