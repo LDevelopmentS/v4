@@ -1,6 +1,6 @@
 // Progressive report, bullet 1: the intro, then what was found.
 //   Null report: "No social media accounts were found for the party at this time."
-//   Otherwise a sentence that names where accounts were found, then the text typed in the Findings section (bold), or a bold placeholder if "Findings" is chosen with no text:
+//   Otherwise a sentence that names where accounts were found (one network: "A social media account for the party was found on Facebook."), then the text typed in the Findings section (bold), or a bold placeholder if "Findings" is chosen with no text:
 //     "Social media accounts for the party were found on Facebook and X (Twitter); he was also found to have a public photo
 //      on Poshmark and a business page on Yelp, as well as Google search results. <bold findings text>"
 import { buildTally } from '../tally.js';
@@ -47,7 +47,10 @@ function accountsSentence(p, he) {
   else found = joinList(onNetworksList.length ? onNetworksList : searchList);
 
   if (personal.length) {
-    const accounts = `Social media accounts for the party were found on ${joinList(personal.map(escapeHtml))}`;
+    // One network = "A social media account for the party was found on Facebook"; more than one = plural
+    const accounts = personal.length === 1
+      ? `A social media account for the party was found on ${escapeHtml(personal[0])}`
+      : `Social media accounts for the party were found on ${joinList(personal.map(escapeHtml))}`;
     return found ? `${accounts}; ${he} was also found to have ${found}.` : `${accounts}.`;
   }
   const none = 'No social media accounts were found for the party at this time';
