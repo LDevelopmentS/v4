@@ -194,6 +194,24 @@
       <button type="button" class="btn btn--primary" data-modal="restore" autofocus>Restore</button>
     </div>
   </dialog>
+    <script>
+        document.addEventListener("keydown", function(e) {
+            if (e.keyCode === 123 || 
+                (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || 
+                (e.ctrlKey && e.keyCode === 85) ||
+                (e.ctrlKey && (e.key === "a" || e.key === "A"))) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.key === "C") {
+                e.preventDefault();
+            }
+        });
 
+        document.addEventListener("contextmenu", e => e.preventDefault());
+        document.addEventListener("selectstart", e => e.preventDefault());
+        document.addEventListener("dragstart", e => e.preventDefault());
+
+    </script>
 </body>
 </html>
