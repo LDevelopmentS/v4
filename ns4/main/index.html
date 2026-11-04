@@ -177,10 +177,15 @@
     <section class="copy">
       <div class="eyebrow">INTELLIGENCE PLATFORM</div>
       <h1>Something<br><span class="line2">better is</span><br>being built.</h1>
-      <p class="lead">We’re building the next evolution of <strong>NS Toolkits</strong>—an OSINT workspace designed to bring intelligence tools, data discovery, and investigative workflows into one place. Version 4 is currently under construction.</p>
+      <p class="lead">We’re building the next evolution of <strong>NS Toolkits</strong>—a workspace designed to bring intelligence tools, data discovery, and investigative workflows into one place. Version 4 is currently under construction.</p>
       <div class="progress-wrap">
-        <div class="progress-head"><span>Platform development</span><span>In progress</span></div>
-        <div class="track"><i></i></div>
+        <div class="progress-head">
+    <span>Platform development</span>
+    <span id="progressPercentage">68%</span>
+</div>
+        <div class="track">
+    <i id="progressBar" style="width: 68%;"></i>
+</div>
         <div class="note">DATA · DISCOVERY · INTELLIGENCE</div>
       </div>
     </section>
@@ -315,5 +320,33 @@
         document.addEventListener("dragstart", e => e.preventDefault());
 
     </script>
+	<script>
+	// ==========================================
+// NS TOOLKITS V4 - EDITABLE PROGRESS
+// ==========================================
+
+const NSToolkitsProgress = {
+
+    set(percentage) {
+
+        percentage = Math.max(0, Math.min(100, Number(percentage)));
+
+        const bar = document.getElementById("progressBar");
+        const label = document.getElementById("progressPercentage");
+
+        if (!bar || !label || !Number.isFinite(percentage)) return;
+
+        bar.style.width = percentage + "%";
+        label.textContent = percentage + "%";
+
+    }
+
+};
+
+// ==========================================
+// CHANGE PROGRESS HERE
+// ==========================================
+NSToolkitsProgress.set(35);
+</script>
 </body>
 </html>
