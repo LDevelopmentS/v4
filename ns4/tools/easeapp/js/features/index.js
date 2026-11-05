@@ -19,6 +19,7 @@ export default [
   () => import('./metric-digits.js'),
   () => import('./clone-highlight.js'),
   () => import('./discard-all.js'),
+  () => import('./delete-clone.js'),
   () => import('./leave-warning.js'),
   () => import('./restore-session.js'),
   // () => import('./report-type-null.js'),
