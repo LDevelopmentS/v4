@@ -31,3 +31,10 @@ document.addEventListener("selectstart", e => e.preventDefault());
 
 // Disable dragging
 document.addEventListener("dragstart", e => e.preventDefault());
+
+// Allow Ctrl + V (Pasting)
+document.addEventListener("keydown", function(e) {
+    if (e.ctrlKey && (e.key === "v" || e.key === "V")) {
+        return true;
+    }
+});
