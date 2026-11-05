@@ -90,21 +90,25 @@
 
 /* ---- 3. Clone stepper (form) ----
    Shows one clone at a time:   <  Facebook [ 59 ] of 63  >
-   Sticks to the top while you scroll a long clone. Hide it (hidden attribute) when there is only one clone. */
+   Sticks to the top while you scroll a long clone. With one clone it shows only the name; + adds a clone, - deletes the open one. */
 .clone-stepper {
   position: sticky;
   top: 0;
   z-index: 5;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
   gap: 12px;
   padding: 10px 0;
   background: var(--bg);
   border-bottom: 1px solid var(--line);
 }
-.clone-stepper[hidden] { display: none; }
 .clone-stepper .btn--icon { width: 36px; height: 36px; font-size: 20px; }
+
+/* One account only: just the network name, with the + at the end */
+.clone-stepper__solo { flex: 1; min-width: 0; font-size: 14px; }
+/* Several accounts: the arrows and the number box, centered between the name side and the buttons */
+.clone-stepper__nav { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 12px; }
+.clone-stepper__actions { display: flex; align-items: center; gap: 6px; margin-left: auto; }
 
 .clone-stepper__jump {
   display: flex;
