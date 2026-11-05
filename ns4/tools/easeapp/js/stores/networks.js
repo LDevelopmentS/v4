@@ -2,6 +2,7 @@
 // Every instance has the same shape, so cloning later only adds and removes instances.
 import { uid } from '../lib/uid.js';
 import { networks as config } from '../config/networks.js';
+import { hasText } from '../lib/filled-check.js';
 
 export const name = 'networks-store';
 
@@ -84,6 +85,17 @@ export function register(Alpine) {
       st.instances.push(newInstanceFor(id));
       this.select(id, st.instances.length - 1); // the new account opens
       announceAdd(id, st.instances.length - 1, st.instances[st.instances.length - 1].id);
+    },
+
+    // The delete buttons (sidebar and form) call this. An empty account goes straight away; one holding typed text
+    // (same rule as Discard all) first asks in an alert window (features/delete-clone.js).
+    requestRemove(id, index) {
+      const inst = this.byId[id].instances[index];
+      if (!inst || index < 1) return;
+      if (!hasText(inst)) return this.remove(id, index);
+      const ask = { id, index, instance: inst.id, handled: false };
+      window.dispatchEvent(new CustomEvent('clone:confirm-remove', { detail: ask })); // runs synchronously
+      if (!ask.handled && window.confirm('Delete this account? It has information in it, and this cannot be undone.')) this.remove(id, index); // only if the feature did not load
     },
 
     // Removing the open account (or one before it) steps back to the previous one, so you stay on the same account.
