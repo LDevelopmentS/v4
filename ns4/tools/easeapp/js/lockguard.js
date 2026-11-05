@@ -32,9 +32,16 @@ document.addEventListener("selectstart", e => e.preventDefault());
 // Disable dragging
 document.addEventListener("dragstart", e => e.preventDefault());
 
-// Allow Ctrl + V (Pasting)
+// ==========================================
+// ALLOW CTRL + V / PASTING
+// ==========================================
+
 document.addEventListener("keydown", function(e) {
-    if (e.ctrlKey && (e.key === "v" || e.key === "V")) {
-        return true;
+    if (e.ctrlKey && e.key.toLowerCase() === "v") {
+        e.stopImmediatePropagation();
     }
-});
+}, true);
+
+document.addEventListener("paste", function(e) {
+    e.stopImmediatePropagation();
+}, true);
