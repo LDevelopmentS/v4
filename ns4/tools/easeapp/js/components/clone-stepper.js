@@ -1,5 +1,6 @@
 // The stepper at the top of a network's section:   <  Facebook [ 59 ] of 63  >
 // Shows one account at a time. Type a number to jump; out-of-range numbers snap to the nearest account.
+// Also holds the + (add an account) and - (delete the open one) buttons.
 import { getNetwork } from '../config/networks.js';
 
 export const name = 'clone-stepper';
@@ -10,6 +11,12 @@ export function register(Alpine) {
     get state() { return Alpine.store('networks').byId[netId]; },
     get total() { return this.state.instances.length; },
     get current() { return this.state.activeClone + 1; },
+
+    // The + and - at the end of the stepper (same actions as the sidebar's). The first account has no -:
+    // it stays, and the network's switch in the sidebar controls it.
+    get canRemove() { return this.state.activeClone > 0; },
+    add() { Alpine.store('networks').add(netId); },
+    remove() { Alpine.store('networks').requestRemove(netId, this.state.activeClone); }, // asks first when the account has text
 
     go(number) {
       Alpine.store('networks').select(netId, Math.min(Math.max(number, 1), this.total) - 1);
