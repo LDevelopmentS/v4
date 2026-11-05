@@ -1,12 +1,21 @@
-<!-- Account stepper, added to the top of every network section by js/core/form-builder.js.
-     Hidden while the network has a single account. Logic: js/components/clone-stepper.js -->
-<div class="clone-stepper" x-data="cloneStepper('__NET__')" x-show="total > 1" role="group" :aria-label="net.name + ' accounts'">
-  <button type="button" class="btn btn--icon" :disabled="current <= 1" @click="go(current - 1)" aria-label="Previous account">&lsaquo;</button>
-  <div class="clone-stepper__jump">
-    <span class="clone-stepper__name" x-text="net.name"></span>
-    <input class="input" type="text" inputmode="numeric" maxlength="3" autocomplete="off" aria-label="Go to account number"
-           :value="current" @input="filter($event)" @keydown="key($event)" @blur="commit($event)" @focus="$event.target.select()">
-    <span x-text="'of ' + total"></span>
+<!-- Account stepper, added to the top of every network section (Google and Others included) by js/core/form-builder.js.
+     With a single account only the name and the + button show. Logic: js/components/clone-stepper.js -->
+<div class="clone-stepper" x-data="cloneStepper('__NET__')" role="group" :aria-label="net.name + ' accounts'">
+  <span class="clone-stepper__solo" x-show="total === 1"><span class="clone-stepper__name" x-text="net.name"></span></span>
+  <div class="clone-stepper__nav" x-show="total > 1">
+    <button type="button" class="btn btn--icon" :disabled="current <= 1" @click="go(current - 1)" aria-label="Previous account">&lsaquo;</button>
+    <div class="clone-stepper__jump">
+      <span class="clone-stepper__name" x-text="net.name"></span>
+      <input class="input" type="text" inputmode="numeric" maxlength="3" autocomplete="off" aria-label="Go to account number"
+             :value="current" @input="filter($event)" @keydown="key($event)" @blur="commit($event)" @focus="$event.target.select()">
+      <span x-text="'of ' + total"></span>
+    </div>
+    <button type="button" class="btn btn--icon" :disabled="current >= total" @click="go(current + 1)" aria-label="Next account">&rsaquo;</button>
   </div>
-  <button type="button" class="btn btn--icon" :disabled="current >= total" @click="go(current + 1)" aria-label="Next account">&rsaquo;</button>
+  <div class="clone-stepper__actions">
+    <button type="button" class="btn btn--icon" @click="add()" :aria-label="'Add another ' + net.name" :title="'Add another ' + net.name">+</button>
+    <button type="button" class="btn btn--icon btn--danger" x-show="total > 1" :disabled="!canRemove" @click="remove()"
+            :aria-label="'Delete this ' + net.name + ' account'"
+            :title="canRemove ? 'Delete this account' : 'The first account stays. Switch the network off in the sidebar instead.'">&minus;</button>
+  </div>
 </div>
