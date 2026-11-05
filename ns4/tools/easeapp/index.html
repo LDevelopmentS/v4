@@ -183,6 +183,18 @@
     </div>
   </dialog>
 
+  <!-- Alert window for deleting an account (clone) that has information in it (js/features/delete-clone.js) -->
+  <dialog class="modal" id="delete-clone-dialog" aria-labelledby="delete-clone-title" aria-describedby="delete-clone-text">
+    <div class="modal__body">
+      <h2 class="modal__title" id="delete-clone-title">Delete <span class="modal__title-accent">account?</span></h2>
+      <p class="modal__text" id="delete-clone-text"><span id="delete-clone-name">This account</span> has information in it. Deleting it removes it from the form and the report, and this can’t be undone.</p>
+    </div>
+    <div class="modal__actions">
+      <button type="button" class="btn" data-modal="cancel" autofocus>Keep it</button>
+      <button type="button" class="btn btn--danger-solid" data-modal="confirm">Delete</button>
+    </div>
+  </dialog>
+
   <!-- Alert window for "Restore session" (js/features/restore-session.js) -->
   <dialog class="modal modal--restore" id="restore-dialog" aria-labelledby="restore-title" aria-describedby="restore-text">
     <div class="modal__body">
