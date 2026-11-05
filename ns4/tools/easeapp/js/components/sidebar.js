@@ -1,7 +1,7 @@
 // Network list in the rail. Switching a network on opens its section in the form.
 // Announces changes (network:toggle); it does not generate any report text.
 import { networks } from '../config/networks.js';
-import { getOtherType } from '../config/other-types.js';
+import { cloneLabel } from '../lib/clone-label.js';
 import { nullOff } from '../config/null-mode.js';
 
 export const name = 'sidebar';
@@ -21,20 +21,12 @@ export function register(Alpine) {
 
     // Accounts after the first one, shown as a list under the network
     clones(id) { return this.state(id).instances.slice(1); },
-    // Name of a clone in the list. "Others" clones also say what they are: "Others 2 (Yelp)".
-    // General and E-commerce show what is typed in Network name (nothing in brackets while it is empty);
-    // the other kinds show their fixed name, like "Others 3 (Classmates)".
-    cloneLabel(net, inst, number) {
-      const base = `${net.name} ${number}`;
-      if (net.id !== 'other') return base;
-      const kind = getOtherType(inst.subType);
-      const detail = kind?.named ? (inst.networkName ?? '').trim() : kind?.name;
-      return detail ? `${base} (${detail})` : base;
-    },
+    // Name of a clone in the list, e.g. "Others 2 (Yelp)" (rules: js/lib/clone-label.js)
+    cloneLabel(net, inst, number) { return cloneLabel(net, inst, number); },
     isOpenClone(id, index) { return this.state(id).activeClone === index ? 'true' : null; },
     addClone(id) { Alpine.store('networks').add(id); },
     selectClone(id, index) { Alpine.store('networks').select(id, index); },
-    removeClone(id, index) { Alpine.store('networks').remove(id, index); },
+    removeClone(id, index) { Alpine.store('networks').requestRemove(id, index); }, // asks first when the account has text
 
     // Keeps the open account in view inside the (capped, scrolling) clone list.
     reveal(id) {
