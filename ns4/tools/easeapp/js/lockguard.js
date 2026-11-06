@@ -33,15 +33,25 @@ document.addEventListener("selectstart", e => e.preventDefault());
 document.addEventListener("dragstart", e => e.preventDefault());
 
 // ==========================================
-// ALLOW CTRL + V / PASTING
+// ALLOW PASTING (CTRL + V)
 // ==========================================
 
+// Allow Ctrl + V and Ctrl + Shift + V
 document.addEventListener("keydown", function(e) {
-    if (e.ctrlKey && e.key.toLowerCase() === "v") {
+    if (
+        (e.ctrlKey || e.metaKey) &&
+        e.key.toLowerCase() === "v"
+    ) {
         e.stopImmediatePropagation();
     }
 }, true);
 
+// Allow paste events
 document.addEventListener("paste", function(e) {
+    e.stopImmediatePropagation();
+}, true);
+
+// Allow paste through context menu
+document.addEventListener("contextmenu", function(e) {
     e.stopImmediatePropagation();
 }, true);
