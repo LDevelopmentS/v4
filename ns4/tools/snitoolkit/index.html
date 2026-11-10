@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'">
+<title>Socmed S&amp;I | NS Toolkits</title>
+<link rel="icon" href="assets/logo.png">
+<script src="js/boot-rail.js"></script>
+<script src="js/boot-theme.js"></script>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/rail.css">
+<link rel="stylesheet" href="css/tool.css">
+</head>
+<body>
+<aside class="rail" id="rail" aria-label="Tool options">
+  <!-- 1. Brand: logo + tool name (name is two-tone: plain word + <b> accent word) -->
+  <a class="rail__brand" href="https://nstoolkits.site/ns4/main/"><span class="tile mark" aria-hidden="true"><img alt="" src="assets/logo.png"></span><span class="lbl title">Socmed <b>S&amp;I</b></span></a>
+
+  <!-- 2. Options: scrolls on its own. Each row: a checkbox + two-letter tile + label + switch. Sub-menus (.rail__sub) open under their switch. -->
+  <div class="rail__scroll">
+    <h6 class="lbl">Management</h6>
+    <button type="button" class="act" id="addRow"><span class="tile" aria-hidden="true">+</span><span class="lbl grow">Add target</span></button>
+
+    <h6 class="lbl rail__gap">Modes</h6>
+    <label class="opt"><input type="checkbox" id="pseSearchToggle"><span class="tile" aria-hidden="true">PS</span><span class="lbl grow">PSE Search Mode</span><span class="sw"></span></label>
+    <label class="opt"><input type="checkbox" id="userModeToggle"><span class="tile" aria-hidden="true">UN</span><span class="lbl grow">Username Mode</span><span class="sw"></span></label>
+
+    <h6 class="lbl rail__gap">Columns</h6>
+    <label class="opt"><input type="checkbox" id="mainToggle"><span class="tile" aria-hidden="true">MS</span><span class="lbl grow">Main Socmed</span><span class="sw"></span></label>
+    <label class="opt"><input type="checkbox" id="subToggle"><span class="tile" aria-hidden="true">SS</span><span class="lbl grow">Sub Socmed</span><span class="sw"></span></label>
+
+    <h6 class="lbl rail__gap">Lookups</h6>
+    <label class="opt"><input type="checkbox" id="engineToggle"><span class="tile" aria-hidden="true">SE</span><span class="lbl grow">Search Engines</span><span class="sw"></span></label>
+    <div class="rail__sub" id="engineSection" hidden>
+      <button type="button" class="act" data-engine="google"><span class="tile" aria-hidden="true">Gg</span><span class="lbl grow">Google Search</span></button>
+      <button type="button" class="act" data-engine="bing"><span class="tile" aria-hidden="true">Bg</span><span class="lbl grow">Bing Search</span></button>
+      <button type="button" class="act" data-engine="ddg"><span class="tile" aria-hidden="true">DD</span><span class="lbl grow">DuckDuckGo</span></button>
+    </div>
+    <label class="opt"><input type="checkbox" id="legalToggle"><span class="tile" aria-hidden="true">LW</span><span class="lbl grow">Lawsuit</span><span class="sw"></span></label>
+    <div class="rail__sub" id="legalSection" hidden>
+      <button type="button" class="act" data-action="legal"><span class="tile" aria-hidden="true">TL</span><span class="lbl grow">Trellis Law (Click Me)</span></button>
+    </div>
+    <label class="opt"><input type="checkbox" id="crimToggle"><span class="tile" aria-hidden="true">CH</span><span class="lbl grow">Criminal History</span><span class="sw"></span></label>
+    <div class="rail__sub rail__sub--danger" id="crimSection" hidden>
+      <button type="button" class="act" data-crim="recentlybooked"><span class="tile" aria-hidden="true">RB</span><span class="lbl grow">Recently Booked</span></button>
+      <button type="button" class="act" data-crim="mugshotszone"><span class="tile" aria-hidden="true">MZ</span><span class="lbl grow">Mugshots Zone</span></button>
+      <button type="button" class="act" data-crim="arrests"><span class="tile" aria-hidden="true">AR</span><span class="lbl grow">Arrests.org</span></button>
+      <button type="button" class="act" data-crim="rainstreet"><span class="tile" aria-hidden="true">RS</span><span class="lbl grow">Rain Street</span></button>
+      <button type="button" class="act" data-crim="localcrimenews"><span class="tile" aria-hidden="true">LC</span><span class="lbl grow">Local Crime News</span></button>
+    </div>
+    <label class="opt"><input type="checkbox" id="finToggle"><span class="tile" aria-hidden="true">WS</span><span class="lbl grow">Wallet Search</span><span class="sw"></span></label>
+    <div class="rail__sub rail__sub--cyan" id="finSection" hidden>
+      <p class="lbl note">Direct username. (Ignores First and Last name, City/State filters)</p>
+      <button type="button" class="act" data-fin="cash"><span class="tile" aria-hidden="true">CA</span><span class="lbl grow">CashApp ($)</span></button>
+      <button type="button" class="act" data-fin="paypal"><span class="tile" aria-hidden="true">PP</span><span class="lbl grow">PayPal.me</span></button>
+    </div>
+    <label class="opt"><input type="checkbox" id="yelpToggle"><span class="tile" aria-hidden="true">YP</span><span class="lbl grow">Yelp Portal</span><span class="sw"></span></label>
+    <div class="rail__sub rail__sub--danger" id="yelpSection" hidden>
+      <p class="lbl note">Direct Yelp Access. (Find friends via address book)</p>
+      <button type="button" class="act" data-action="yelp"><span class="tile" aria-hidden="true">Y</span><span class="lbl grow">Open Yelp Search</span></button>
+    </div>
+
+    <h6 class="lbl rail__gap">Guides</h6>
+    <label class="opt"><input type="checkbox" id="guideToggle"><span class="tile" aria-hidden="true">SG</span><span class="lbl grow">Search Guide</span><span class="sw"></span></label>
+    <label class="opt"><input type="checkbox" id="listToggle"><span class="tile" aria-hidden="true">CL</span><span class="lbl grow">Checklist</span><span class="sw"></span></label>
+  </div>
+
+  <!-- 3. Tools: lock sidebar + light mode. Same in every tool; do not move or restyle. -->
+  <div class="tools">
+    <button type="button" class="rail__tool rail__lock" id="rail-lock" aria-label="Lock sidebar" aria-pressed="false" title="Lock sidebar"><span class="tile" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><rect x="5" y="11" width="14" height="9"/><path class="rail__shackle" d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span></button>
+    <button type="button" class="rail__tool rail__theme" id="theme-toggle" aria-label="Light mode" aria-pressed="false" title="Light mode"><span class="tile" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg></span></button>
+  </div>
+
+  <!-- 4. Site links: same three in every tool -->
+  <nav class="rail__links" aria-label="Site">
+    <a href="https://nstoolkits.site/ns4/main"><span class="tile" aria-hidden="true">H</span><span class="lbl">Home</span></a>
+    <a href="https://nstoolkits.site/nsv3/about.html"><span class="tile" aria-hidden="true">A</span><span class="lbl">About us</span></a>
+    <a href="https://nstoolkits.site/nsv3/download.html"><span class="tile" aria-hidden="true">D</span><span class="lbl">Download</span></a>
+  </nav>
+</aside>
+
+<main class="stage">
+  <section class="pane">
+    <h1 class="pane__title">Socmed S&amp;I</h1>
+    <p class="sub">Advanced Social Intelligence Gathering.</p>
+    <div class="bar"><span>S&amp;I DASHBOARD // ACTIVE SESSION</span><span class="bar__count" id="rowCount">0 TARGET/S LOADED</span></div>
+    <div class="recent" id="recentWrap" hidden>
+      <span class="recent__lbl">Recent searches</span>
+      <div class="hist-list" id="historyList"></div>
+      <button type="button" class="recent__more" id="historyMore" aria-haspopup="dialog">View all</button>
+    </div>
+    <div class="table-wrap">
+      <table class="si" id="siTable"><thead><tr id="headRow"></tr></thead><tbody id="tableBody"></tbody></table>
+    </div>
+  </section>
+</main>
+
+<div class="modal" id="guideModal" hidden role="dialog" aria-modal="true" aria-label="Search Guide">
+  <div class="modal__panel">
+    <header class="modal__head">
+      <h2 class="modal__title">Search Guide</h2>
+      <button type="button" class="modal__reset">Reset ticks</button>
+      <button type="button" class="modal__close" aria-label="Close">✕</button>
+    </header>
+    <div class="modal__body" id="guideBody"></div>
+  </div>
+</div>
+<div class="modal" id="listModal" hidden role="dialog" aria-modal="true" aria-label="Network Library / Checklist">
+  <div class="modal__panel">
+    <header class="modal__head">
+      <h2 class="modal__title">Network Library / Checklist</h2>
+      <span class="modal__prog"><span>Checklist completion</span> <b id="listProgress">0 / 0</b><progress id="listBar" value="0" max="1"></progress></span>
+      <button type="button" class="modal__reset">Reset ticks</button>
+      <button type="button" class="modal__close" aria-label="Close">✕</button>
+    </header>
+    <div class="modal__body" id="listBody"></div>
+  </div>
+</div>
+<div class="modal" id="historyModal" hidden role="dialog" aria-modal="true" aria-label="Recent searches">
+  <div class="modal__panel modal__panel--sm">
+    <header class="modal__head">
+      <h2 class="modal__title">Recent Searches <span class="hl-count" id="historyCount"></span></h2>
+      <button type="button" class="modal__reset" id="historyClear">Clear all</button>
+      <button type="button" class="modal__close" aria-label="Close">✕</button>
+    </header>
+    <div class="hl-tools"><input type="search" class="hl-search" id="historySearch" placeholder="Filter recent searches" autocomplete="off" aria-label="Filter recent searches"></div>
+    <div class="modal__body hl" id="historyAll"></div>
+  </div>
+</div>
+
+<footer class="footer">© 2026 NS Toolkits v4 | Built by the NS Toolkits Team</footer>
+<script defer src="js/app.js"></script>
+<script src="../js/guard.js"></script>
+</body>
+</html>

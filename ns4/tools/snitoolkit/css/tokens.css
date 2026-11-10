@@ -1,0 +1,18 @@
+/* Design tokens. Change colours and sizes here only. Dark is the default; light applies when <html data-theme="light">. */
+:root{
+  color-scheme:dark;
+  --bg:#000;--ink:#0d0d0d;--rail-bg:#000;--field:#000;--line:#262626;--line-hover:#3a3a3a;--btn-line:#4a4a4a;
+  --text:#f2f2f2;--text-soft:#bdbdbd;--muted:#8c8c8c;--placeholder:#808080;
+  --yellow:#f6c90e;--yellow-ink:#f6c90e;--yellow-soft:rgba(246,201,14,.14);--on-accent:#000;--focus:#f6c90e;
+  --pane:#151515;--danger:#ff5c4d;--cyan:#00d4ff;--scrim:rgba(0,0,0,.45);
+  --rail-w:64px;--rail-open:248px;--footer-h:36px;--ease:cubic-bezier(.2,.7,.2,1);
+  --font:"Bahnschrift","DIN Alternate","Franklin Gothic Medium","Arial Narrow",system-ui,sans-serif;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg:#f4f4f3;--ink:#fff;--rail-bg:#fff;--field:#fff;--line:#d6d6d3;--line-hover:#b0b0ac;--btn-line:#9c9c98;
+  --text:#050505;--text-soft:#262626;--muted:#4d4d4d;--placeholder:#707070;
+  --yellow:#f6c90e;--yellow-ink:#7a5f00;--yellow-soft:rgba(246,201,14,.22);--focus:#7a5f00;
+  --pane:#fff;--danger:#b3261e;--cyan:#006f8c;--scrim:rgba(0,0,0,.25);
+}
