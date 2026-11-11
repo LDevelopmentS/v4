@@ -69,7 +69,7 @@ function copyCleanedList(queries, platformName, platformLabel) {
 }
 
 /* ---------- Excel export: genuine .xlsx workbook, built in the browser by js/xs-xlsx.js (no library needed) ---------- */
-function exportToExcel(querySets, formData) {
+function exportToExcelLegacy(querySets, formData) {
   const { buildXlsx, downloadBlob } = window.XSM['xs-xlsx'];
   const detailRows = [['Field', 'Value']];
   const section = t => detailRows.push([t, '']);
@@ -119,6 +119,14 @@ function exportToExcel(querySets, formData) {
   const safe = formData.fullName.replace(/[^a-z0-9]+/gi, '_').replace(/^_+|_+$/g, '') || 'search-strings';
   downloadBlob(blob, `${safe}.xlsx`);
   showToast('Excel workbook downloaded');
+}
+
+/* ---------- Export to Excel: fills the "Name - Searchstrings" template (js/xs-template-export.js) ---------- */
+function exportToExcel(querySets, formData) {
+  const ex = window.XSM['xs-template-export'];
+  if (!ex || !window.XSM['xs-template']) { exportToExcelLegacy(querySets, formData); return; }
+  const { over, fileName } = ex.exportSearchstrings(formData, querySets);
+  showToast(over.length ? `Downloaded ${fileName}. Not all fit the template: ${over.join('; ')}` : `Downloaded ${fileName}`);
 }
 
 /* ---------- render ---------- */
@@ -177,7 +185,7 @@ function renderResults(querySets, formData) {
   const exportBtn = document.createElement('button');
   exportBtn.type = 'button';
   exportBtn.className = 'export-btn';
-  exportBtn.textContent = 'Export to Excel';
+  exportBtn.textContent = 'Export to Spreadsheet';
   exportBtn.addEventListener('click', () => exportToExcel(querySets, formData));
   filterRow.append(filterInput, expandToggle, exportBtn);
   bar.appendChild(filterRow);
