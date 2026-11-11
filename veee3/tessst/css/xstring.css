@@ -1,0 +1,160 @@
+/* xString tool styles. Colours come from tokens.css only. */
+.xs{display:grid;grid-template-columns:360px minmax(0,1fr);gap:24px;align-items:start;margin-top:20px}
+@media(max-width:900px){.xs{grid-template-columns:1fr}.xs__form{position:static;max-height:none}}
+
+/* Subject panel */
+.xs__form{position:sticky;top:24px;max-height:calc(100vh - var(--footer-h) - 48px);overflow-y:auto;background:var(--pane);border:1px solid var(--line);padding:20px 18px 0}
+.xs .field-section{margin-bottom:22px}
+.xs .field-section h3{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.xs .field{margin-bottom:14px}
+.xs .field:last-child{margin-bottom:0}
+.xs .field label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
+.xs .date-hint{font-weight:400;color:var(--muted)}
+
+.xs input[type="text"],.xs input[type="tel"]{width:100%;padding:9px 11px;background:var(--field);color:var(--text);border:1px solid var(--line);outline:none;transition:border-color .15s}
+.xs input[type="text"]:hover,.xs input[type="tel"]:hover{border-color:var(--line-hover)}
+.xs input[type="text"]:focus,.xs input[type="tel"]:focus{border-color:var(--yellow)}
+.xs input::placeholder{color:var(--placeholder)}
+
+.xs .dynamic-row,.xs .location-row,.xs .dol-row,.xs .dob-row{display:flex;gap:6px;margin-bottom:6px;align-items:center}
+.xs .dynamic-row input,.xs .dol-row input,.xs .dob-row input{flex:1}
+.xs .icon-btn{flex:0 0 34px;height:38px;background:none;border:1px solid var(--line);color:var(--danger);cursor:pointer}
+.xs .icon-btn:hover{border-color:var(--danger)}
+.xs .add-link,.xs .variant-actions button,.xs .expand-toggle{background:none;border:0;color:var(--yellow-ink);font-weight:600;font-size:13px;cursor:pointer;padding:2px 0}
+.xs .add-link:hover,.xs .variant-actions button:hover,.xs .expand-toggle:hover{text-decoration:underline}
+
+.xs .alias-row{border:1px solid var(--line);padding:7px 8px;margin-bottom:6px;background:var(--field)}
+.xs .alias-row-top{display:flex;gap:6px;margin-bottom:6px}
+.xs .alias-row-top input{flex:1}
+.xs .alias-type-toggle{display:flex;gap:16px;font-size:13px}
+.xs .alias-type-toggle label{display:flex;align-items:center;gap:4px;cursor:pointer;margin:0;font-weight:400}
+.xs .alias-type-toggle input{accent-color:var(--yellow)}
+
+.xs .variant-list{border:1px solid var(--line);background:var(--field);max-height:190px;overflow-y:auto;padding:4px 6px}
+.xs .variant-row{display:flex;align-items:center;gap:8px;padding:5px 4px;font-size:13px;font-weight:400;cursor:pointer;border-bottom:1px solid var(--line);margin:0}
+.xs .variant-row:last-child{border-bottom:0}
+.xs .variant-row input{accent-color:var(--yellow);flex:none}
+.xs .variant-row span{word-break:break-word}
+.xs .variant-row.unchecked span{color:var(--muted);text-decoration:line-through}
+.xs .variant-actions{display:flex;gap:12px;margin-top:6px}
+
+
+/* Results */
+.xs__results{min-width:0}
+.xs .action-bar{position:sticky;top:0;background:var(--bg);padding:0 0 14px;z-index:5}
+.xs .platform-icon-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.xs .platform-icon-btn{width:42px;height:42px;flex:none;display:grid;place-items:center;background:var(--pane);border:1px solid var(--line);cursor:pointer;padding:0;transition:border-color .15s}
+.xs .platform-icon-btn:hover{border-color:var(--yellow)}
+.xs .platform-icon-btn img{width:22px;height:22px;object-fit:contain}
+.xs .platform-icon-fallback{font-size:12px;font-weight:700;color:var(--muted)}
+.xs .platform-icon-btn:hover .platform-icon-fallback{color:var(--yellow-ink)}
+
+.xs .filter-row{display:flex;align-items:center;gap:12px;margin-top:14px}
+.xs .filter-row input{flex:1}
+.xs .expand-toggle{white-space:nowrap}
+.xs .export-btn{white-space:nowrap;background:var(--yellow);color:var(--on-accent);border:0;font-weight:600;padding:9px 12px;cursor:pointer}
+.xs .export-btn:hover{opacity:.88}
+
+.xs .empty-state{border:1px dashed var(--line);padding:44px 20px;text-align:center;color:var(--muted);background:var(--pane)}
+.xs .empty-state strong{display:block;color:var(--text);margin-bottom:6px}
+
+.xs .result-group{border:1px solid var(--line);margin-bottom:10px;background:var(--pane)}
+.xs .result-group summary{list-style:none;cursor:pointer;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;font-weight:600}
+.xs .result-group summary::-webkit-details-marker{display:none}
+.xs .result-group .count{font-weight:400;font-size:13px;color:var(--muted)}
+.xs .result-group .rows{border-top:1px solid var(--line)}
+.xs .row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid var(--line);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+.xs .row a{color:inherit;text-decoration:none;word-break:break-word}
+.xs .row a:hover{color:var(--yellow-ink);text-decoration:underline}
+.xs .copy-mini{flex:none;background:none;border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:600;padding:4px 9px;cursor:pointer}
+.xs .copy-mini:hover{background:var(--yellow);border-color:var(--yellow);color:var(--on-accent)}
+.xs .no-matches{color:var(--muted);padding:14px 16px}
+
+/* Elements appended to <body> by JS */
+#copyToast{position:fixed;bottom:calc(var(--footer-h) + 20px);left:50%;transform:translateX(-50%) translateY(16px);background:var(--pane);color:var(--yellow-ink);border:1px solid var(--yellow);padding:11px 20px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .22s var(--ease),transform .22s var(--ease);z-index:9999}
+#copyToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+#stateDropdown{position:fixed;z-index:9999;box-sizing:border-box;max-height:74px;overflow:hidden auto;background:var(--pane);border:1px solid var(--line-hover);font-size:13px;color:var(--text);scrollbar-width:thin}
+#stateDropdown .sd-row{box-sizing:border-box;height:18px;line-height:16px;padding:0 8px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#stateDropdown .sd-row + .sd-row{border-top:1px solid var(--line)}
+#stateDropdown .sd-row.active,#stateDropdown .sd-row:hover{background:var(--yellow-soft)}
+#stateDropdown .sd-row b{color:var(--yellow-ink)}
+
+/* Locked (read-only) record */
+#lockedBanner{background:var(--yellow-soft);color:var(--yellow-ink);border-bottom:1px solid var(--yellow);padding:10px 20px;font-weight:600;text-align:center}
+.locked .xs input:disabled{background:var(--pane);color:var(--muted);cursor:not-allowed}
+.locked .xs .add-link,.locked .xs .icon-btn,.locked #clearGenBtn,.locked #loadStateBtn{display:none!important}
+
+/* Merge-last-name toggle and Google region switch (back in the form, as in the original) */
+.xs .field label.toggle-row{display:flex;align-items:center;gap:10px;margin:10px 0 0;cursor:pointer;font-weight:600;user-select:none}
+.xs .toggle-row input{position:absolute;opacity:0;width:0;height:0}
+.xs .toggle-switch{position:relative;flex:none;width:34px;height:19px;border-radius:999px;background:var(--line);border:1px solid var(--line-hover);transition:background .15s,border-color .15s}
+.xs .toggle-switch::after{content:"";position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:var(--muted);transition:transform .15s,background .15s}
+.xs .toggle-row input:checked + .toggle-switch{background:var(--yellow);border-color:var(--yellow)}
+.xs .toggle-row input:checked + .toggle-switch::after{transform:translateX(15px);background:var(--on-accent)}
+.xs .toggle-row input:focus-visible + .toggle-switch{outline:2px solid var(--focus);outline-offset:2px}
+.xs .region-switch{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:13px}
+.xs .region-switch .region-label{font-weight:600;color:var(--muted)}
+.xs .region-switch label{display:flex;align-items:center;gap:4px;cursor:pointer;font-weight:600;margin:0}
+.xs .region-switch input{accent-color:var(--yellow);margin:0;cursor:pointer}
+/* White brand icons (X, TikTok) would vanish on the light theme */
+:root[data-theme="light"] .xs .platform-icon-btn.is-white img{filter:invert(1)}
+
+/* ===== Design refresh: matches the main site / Template Writer (square edges, black surface, yellow accent, small tracked labels) ===== */
+.pane__title{font-size:16px;font-weight:700;letter-spacing:.02em}
+.xs{grid-template-columns:400px minmax(0,1fr);gap:32px;margin-top:24px}
+
+/* Subject panel: black surface, thin scrollbar, section cards */
+.xs__form{top:24px;padding:0;background:var(--bg);border:1px solid var(--line);display:flex;flex-direction:column;overflow-y:auto}
+.xs__form>*{flex:none}
+.xs__scroll,.xs__form{scrollbar-width:thin;scrollbar-color:var(--line-hover) transparent}
+.xs .field-section{margin:0;padding:18px 20px;background:var(--ink);border-bottom:1px solid var(--line)}
+.xs .field-section h3{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 16px;padding:0;border:0}
+.xs .field{margin-bottom:18px}
+.xs .field:last-child{margin-bottom:0}
+.xs .field label{font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px}
+.xs .date-hint{font-size:12px;color:var(--muted)}
+
+/* Inputs: taller, same border / focus treatment as the main site */
+.xs input[type="text"],.xs input[type="tel"]{height:44px;padding:0 14px;background:var(--field);border:1px solid var(--line);font-size:14px}
+.xs .dynamic-row,.xs .location-row,.xs .dol-row,.xs .dob-row{gap:8px;margin-bottom:8px}
+.xs .icon-btn{flex:0 0 44px;height:44px;display:grid;place-items:center;font-size:16px;line-height:1}
+.xs .add-link,.xs .variant-actions button,.xs .expand-toggle{font-size:12px;letter-spacing:.02em;padding:4px 0;margin-top:2px}
+.xs .alias-row{padding:10px;margin-bottom:8px;background:var(--bg)}
+.xs .alias-row-top{gap:8px;margin-bottom:10px}
+.xs .alias-type-toggle{gap:18px}
+.xs .alias-type-toggle label{font-size:12px;font-weight:600;color:var(--text-soft)}
+.xs .variant-list{background:var(--bg)}
+.xs .region-switch{margin:0;padding:16px 20px;background:var(--ink);border-bottom:1px solid var(--line);gap:16px}
+.xs .region-switch .region-label{font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+
+/* Action buttons: one sticky footer, 2 x 2 grid, equal size, even 12px spacing */
+.xs__footer{position:sticky;bottom:0;z-index:3;margin-top:auto;padding:16px 20px 20px;background:var(--bg);border-top:1px solid var(--line)}
+.xs .xs__actions{position:static;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0;padding:0;border:0;background:none}
+.xs .btn{height:44px;padding:0 12px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;letter-spacing:.02em;background:none;color:var(--yellow-ink);border:1px solid var(--yellow);cursor:pointer;transition:background .15s,color .15s,opacity .15s}
+.xs .btn:hover{background:var(--yellow);color:var(--on-accent)}
+.xs .btn.primary{background:var(--yellow);color:var(--on-accent)}
+.xs .btn.primary:hover{opacity:.88}
+.xs #clearGenBtn{color:var(--danger);border-color:var(--danger)}
+.xs #clearGenBtn:hover{background:var(--danger);color:var(--on-accent)}
+
+/* Results */
+.xs .action-bar{padding-bottom:18px}
+.xs .platform-icon-row{gap:12px}
+.xs .filter-row{gap:16px;margin-top:18px}
+.xs .filter-row input{height:44px}
+.xs .export-btn{height:44px;padding:0 18px;font-size:13px;font-weight:700}
+.xs .result-group{margin-bottom:12px;background:var(--ink)}
+.xs .result-group summary{padding:14px 18px;font-size:13px;letter-spacing:.04em}
+.xs .row{padding:10px 18px}
+.xs .copy-mini{padding:5px 12px}
+.xs .empty-state{background:var(--ink)}
+@media(max-width:900px){.xs{grid-template-columns:1fr}.xs__form{max-height:none}}
+@media(max-width:420px){.xs .xs__actions{grid-template-columns:1fr}}
+.xs__form{max-height:calc(100vh - var(--footer-h) - 112px)}
+.xs .variant-row input{margin:0}
+.xs .variant-row{padding:7px 4px}
+@media(max-width:900px){.xs__form{max-height:none}}
+
+.xs .filter-row{flex-wrap:wrap}
+.xs .filter-row input{min-width:160px}

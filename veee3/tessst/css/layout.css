@@ -1,0 +1,29 @@
+/* Page frame: sidebar (fixed) | stage (your tool) | footer bar.
+   The footer is a slim bar that stays at the bottom of the window beside the sidebar. */
+.stage{margin-left:var(--rail-w);min-height:calc(100vh - var(--footer-h));transition:margin-left .22s var(--ease)}
+/* Blur + dim the page while the sidebar is open */
+.stage::after{content:"";position:fixed;inset:0;z-index:40;background:var(--scrim);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .22s var(--ease)}
+.rail:hover ~ .stage::after,.rail:has(:focus-visible) ~ .stage::after,.rail.is-open ~ .stage::after{opacity:1}
+
+.footer{position:sticky;bottom:0;box-sizing:border-box;margin-left:var(--rail-w);height:var(--footer-h);display:flex;align-items:center;padding:0 24px;
+  background:var(--bg);color:var(--muted);font-size:13px;border-top:1px solid var(--line);transition:margin-left .22s var(--ease)}
+
+/* Your tool's content */
+.pane{padding:24px}
+.pane__title{font-size:15px;font-weight:600;letter-spacing:.02em}
+.sub{color:var(--muted);font-size:13px;margin-top:2px}
+
+@media(max-width:600px){:root{--rail-w:56px}.pane{padding:20px 16px}.footer{padding:0 16px}}
+
+/* Locked sidebar (wide screens only): the page starts after the full-width sidebar and the blur is off. */
+@media(min-width:1200px){
+  html.rail-locked .stage,html.rail-locked .footer{margin-left:var(--rail-open)}
+  html.rail-locked .stage::after{display:none}
+}
+
+/* Seamless hop between tools: the sidebar keeps its place while the page cross-fades. Keep these in every tool. */
+@view-transition{navigation:auto}
+.rail{view-transition-name:rail}
+::view-transition-group(rail){animation-duration:.22s;animation-timing-function:var(--ease)}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.18s}
+@media(prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}

@@ -1,0 +1,7 @@
+{
+  "name": "NS xString",
+  "short": "xS",
+  "status": "",
+  "desc": "Builds search strings and platform search links from a subject's details.",
+  "icon": "<circle cx=\"11\" cy=\"11\" r=\"6\"/><path d=\"M16 16l5 5\"/>"
+}
