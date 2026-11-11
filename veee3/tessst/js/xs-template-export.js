@@ -92,7 +92,16 @@ function mapQueriesToAutoUrl(querySets) {
     if (list.length > maxRows) over.push(`AutoURL ${p.label} (${list.length - maxRows} over the ${maxRows}-row limit)`);
     return list.slice(0, maxRows).map(q => ({ text: q, url: buildSearchUrl(q, key) }));
   });
-  return { cols, over };
+  // The three copy-all panels on the Search String tab: one cell each, all strings of that group joined by line breaks
+  const panels = {};
+  [['E', 'full', 'Facebook, Twitter, Youtube, Google'], ['I', 'groupC', 'LinkedIn, RocketReach, SignalHire'], ['M', 'groupB', 'Instagram, TikTok, Pinterest, Strava, Foursquare, Tumblr']].forEach(([col, group, label]) => {
+    const list = (querySets && querySets[group]) || [];
+    let text = '', used = 0;
+    for (const q of list) { const next = used ? text + '\n' + q : q; if (next.length > 32000) break; text = next; used++; }
+    if (used < list.length) over.push(`${label} text box (${list.length - used} strings did not fit in one cell; they are all in AutoURL)`);
+    panels[col] = text;
+  });
+  return { cols, over, panels };
 }
 
 // Link-styled template styles, alternating row shading like the template: [odd row, even row]
@@ -133,7 +142,7 @@ function buildAutoUrlSheet(autoCols) {
   return { xml, rels };
 }
 
-function buildTemplateXlsx(cells, autoCols) {
+function buildTemplateXlsx(cells, autoCols, panels) {
   const T = window.XSM['xs-template'];
   // rebuild sheet4.xml ('Search String') with the inputs filled in; each cell keeps its template style
   let sheet = '';
@@ -143,6 +152,13 @@ function buildTemplateXlsx(cells, autoCols) {
       const ref = 'C' + (i + 3), v = cells[ref], s = T.styles[i];
       sheet += v == null ? `<c r="${ref}" s="${s}"/>` : `<c r="${ref}" s="${s}" t="inlineStr"><is><t xml:space="preserve">${esc(v)}</t></is></c>`;
     }
+  });
+  // Search-string text boxes (E4, I4, M4). In the template they come from Google-only formulas that skip rows and do not run outside
+  // Google Sheets, so write the complete list directly and drop the formulas.
+  ['E', 'I', 'M'].forEach(col => {
+    sheet = sheet.replace(new RegExp(`<c r="${col}3"[^>]*>\\s*<f[^>]*>.*?</f>(?:<v>[^<]*</v>)?</c>`, 's'), `<c r="${col}3" s="16"/>`);
+    const text = panels && panels[col];
+    if (text) sheet = sheet.replace(new RegExp(`<c r="${col}4"[^>]*?(?:/>|>.*?</c>)`, 's'), () => `<c r="${col}4" s="${T.wrapStyle}" t="inlineStr"><is><t xml:space="preserve">${esc(text)}</t></is></c>`);
   });
   const stored = (name, text) => { const d = enc.encode(text); return { name, method: 0, crc: crc32(d), usize: d.length, data: d }; };
   const files = T.entries.map(e => ({ name: e.n, method: e.m, crc: e.c >>> 0, usize: e.u, data: b64ToBytes(e.z) }));
@@ -167,14 +183,14 @@ function buildSearchstringsBlob(formData, querySets) {
   const { cells, over } = mapFormToCells(formData);
   const auto = mapQueriesToAutoUrl(querySets);
   over.push(...auto.over);
-  return { blob: buildTemplateXlsx(cells, auto.cols), over, fileName: exportFileName(formData.fullName) };
+  return { blob: buildTemplateXlsx(cells, auto.cols, auto.panels), over, fileName: exportFileName(formData.fullName) };
 }
 
 function exportSearchstrings(formData, querySets) {
   const { cells, over } = mapFormToCells(formData);
   const auto = mapQueriesToAutoUrl(querySets);
   over.push(...auto.over);
-  const blob = buildTemplateXlsx(cells, auto.cols);
+  const blob = buildTemplateXlsx(cells, auto.cols, auto.panels);
   window.XSM['xs-xlsx'].downloadBlob(blob, exportFileName(formData.fullName));
   return { over, fileName: exportFileName(formData.fullName) };
 }
