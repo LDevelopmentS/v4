@@ -162,6 +162,14 @@ function exportFileName(fullName) {
   return `${clean} - Searchstrings.xlsx`;
 }
 
+// Same workbook as exportSearchstrings, returned instead of downloaded (used by "Copy to Google Sheets")
+function buildSearchstringsBlob(formData, querySets) {
+  const { cells, over } = mapFormToCells(formData);
+  const auto = mapQueriesToAutoUrl(querySets);
+  over.push(...auto.over);
+  return { blob: buildTemplateXlsx(cells, auto.cols), over, fileName: exportFileName(formData.fullName) };
+}
+
 function exportSearchstrings(formData, querySets) {
   const { cells, over } = mapFormToCells(formData);
   const auto = mapQueriesToAutoUrl(querySets);
@@ -171,5 +179,5 @@ function exportSearchstrings(formData, querySets) {
   return { over, fileName: exportFileName(formData.fullName) };
 }
 
-window.XSM['xs-template-export'] = { mapFormToCells, mapQueriesToAutoUrl, buildTemplateXlsx, exportFileName, exportSearchstrings };
+window.XSM['xs-template-export'] = { mapFormToCells, mapQueriesToAutoUrl, buildSearchstringsBlob, buildTemplateXlsx, exportFileName, exportSearchstrings };
 })();

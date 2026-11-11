@@ -185,9 +185,15 @@ function renderResults(querySets, formData) {
   const exportBtn = document.createElement('button');
   exportBtn.type = 'button';
   exportBtn.className = 'export-btn';
-  exportBtn.textContent = 'Export to Spreadsheet';
+  exportBtn.textContent = 'Export to Excel';
   exportBtn.addEventListener('click', () => exportToExcel(querySets, formData));
-  filterRow.append(filterInput, expandToggle, exportBtn);
+  const gsBtn = document.createElement('button');
+  gsBtn.type = 'button';
+  gsBtn.className = 'export-btn';
+  gsBtn.textContent = 'Copy to Google Sheets';
+  gsBtn.title = 'Creates the same workbook as Export to Excel directly in your Google Drive as a Google Sheet, and opens it';
+  gsBtn.addEventListener('click', () => { window.XSM['xs-results-last'] = querySets; window.XSM['xs-gsheets'].copyToGoogleSheets(formData, gsBtn); });
+  filterRow.append(filterInput, expandToggle, exportBtn, gsBtn);
   bar.appendChild(filterRow);
   el.appendChild(bar);
 

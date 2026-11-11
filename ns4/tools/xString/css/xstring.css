@@ -155,3 +155,6 @@
 .xs .variant-row input{margin:0}
 .xs .variant-row{padding:7px 4px}
 @media(max-width:900px){.xs__form{max-height:none}}
+
+.xs .filter-row{flex-wrap:wrap}
+.xs .filter-row input{min-width:160px}

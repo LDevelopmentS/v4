@@ -277,6 +277,15 @@ function applyFormState(state) {
 }
 
 function loadStateFromFile(file) {
+  // An exported "<Name> - Searchstrings.xlsx" (or a copy saved from Excel / Google Sheets)
+  if (/\.xlsx$/i.test(file.name) || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+    window.XSM['xs-xlsx-import'].readXlsxState(file).then(state => {
+      if (!state.fullName && !state.emails.length && !state.phones.length && !state.aliases.length) { alert('No search details were found on the Search String sheet of that file.'); return; }
+      applyFormState(state);
+      showToast('Loaded details from Excel file');
+    }).catch(err => alert('That Excel file could not be read (' + ((err && err.message) || 'unknown error') + '). Use a file exported from this tool; the Search String sheet must still be there.'));
+    return;
+  }
   const reader = new FileReader();
   reader.onload = () => {
     const raw = reader.result;
