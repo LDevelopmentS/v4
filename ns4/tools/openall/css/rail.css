@@ -1,0 +1,70 @@
+/* Sidebar: icon rail that widens over the page on hover / keyboard focus / tap (.is-open).
+   Order top to bottom: brand, scrolling options (.rail__scroll), tools (.tools), site links (.rail__links). */
+.rail{position:fixed;inset:0 auto 0 0;width:var(--rail-w);z-index:50;display:flex;flex-direction:column;gap:8px;
+  padding:calc(12px + env(safe-area-inset-top,0px)) 8px 12px;background:var(--rail-bg);border-right:1px solid var(--line);
+  border-top:4px solid var(--yellow);overflow-x:hidden;overflow-y:auto;scrollbar-width:none;transition:width .22s var(--ease)}
+.rail::-webkit-scrollbar{display:none}
+.rail:hover,.rail:has(:focus-visible),.rail.is-open{width:var(--rail-open)}
+.rail a,.rail button{display:flex;align-items:center;gap:14px;height:42px;padding:0 4px;background:none;border:0;cursor:pointer;text-align:left;color:inherit;text-decoration:none}
+.rail__brand{margin-bottom:8px}
+.rail .rail__gap{padding-top:14px}
+
+/* Tiles: 40px squares that stay put while the rail widens. */
+.tile{flex:0 0 40px;height:36px;display:grid;place-items:center;font-size:13px;font-weight:700;border:1px solid var(--line);transition:.15s}
+.rail a:hover .tile,.rail button:hover .tile{border-color:var(--yellow);color:var(--yellow-ink)}
+.mark{background:#fec401;border-color:#fec401;overflow:hidden}.mark img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* Labels exist but stay hidden until the rail opens. */
+.lbl{opacity:0;white-space:nowrap;transition:opacity .15s}
+.rail:hover .lbl,.rail:has(:focus-visible) .lbl,.rail.is-open .lbl{opacity:1;transition-delay:.08s}
+.title{font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}.title b{color:var(--yellow-ink)}
+.rail h6{font-size:13px;font-weight:400;color:var(--muted);padding:8px 4px 0}
+
+/* Option row: a radio/checkbox shown as a tile + switch. */
+.opt{position:relative;display:flex;align-items:center;gap:14px;height:42px;padding:0 4px;cursor:pointer}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .grow{flex:1}
+.opt .sw{flex:0 0 28px;height:14px;border:1px solid var(--muted);position:relative;opacity:0;transition:opacity .15s}
+.opt .sw::after{content:"";position:absolute;top:2px;left:2px;width:8px;height:8px;background:var(--muted);transition:.15s}
+.rail:hover .opt .sw,.rail:has(:focus-visible) .opt .sw,.rail.is-open .opt .sw{opacity:1}
+.opt input:checked ~ .tile{background:var(--yellow);border-color:var(--yellow);color:var(--on-accent)}
+.opt input:checked ~ .sw{border-color:var(--yellow)}
+.opt input:checked ~ .sw::after{transform:translateX(14px);background:var(--yellow)}
+.opt input:focus-visible ~ .tile{outline:2px solid var(--focus);outline-offset:2px}
+.opt:hover .tile{border-color:var(--yellow)}
+
+/* Options scroll on their own, so brand, tools and site links stay put on short screens. A soft cue shows where more rows are hidden. */
+.rail__scroll{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:2px;overflow-x:hidden;overflow-y:auto;scrollbar-width:none;transition:margin-bottom .22s var(--ease)}
+.rail__scroll::-webkit-scrollbar{display:none}
+.rail__scroll .opt{flex:none;height:32px}
+.rail__scroll .tile{height:30px}
+.rail__scroll h6{flex:none}
+.rail__scroll .rail__gap{padding-top:8px}
+.rail__scroll{--cue:color-mix(in srgb,var(--yellow) 40%,transparent);
+  background:
+    linear-gradient(var(--rail-bg) 30%,transparent) top/100% 22px no-repeat local,
+    linear-gradient(transparent,var(--rail-bg) 70%) bottom/100% 22px no-repeat local,
+    radial-gradient(farthest-side at 50% 0,var(--cue),transparent) top/100% 8px no-repeat scroll,
+    radial-gradient(farthest-side at 50% 100%,var(--cue),transparent) bottom/100% 8px no-repeat scroll}
+
+/* Tools (lock + light mode) and site links. Same boxes and positions in every tool, so the bottom of the sidebar never moves. */
+.tools{display:flex;flex-direction:column;gap:0;margin-top:auto;padding-bottom:8px}
+.rail .rail__tool{flex:0 0 auto;width:48px;min-width:48px;transition:transform .22s var(--ease)}
+.rail .rail__lock{display:none}
+.rail__links{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:8px}
+
+/* Lock: filled while locked; the shackle lifts when unlocked. Light mode: filled while light is on. */
+html.rail-locked .rail__lock .tile,html[data-theme="light"] .rail__theme .tile{background:var(--yellow);border-color:var(--yellow);color:var(--on-accent)}
+html:not(.rail-locked) .rail__lock .rail__shackle{transform:translateY(-3px)}
+html.rail-locked .rail__lock:hover .tile,html[data-theme="light"] .rail__theme:hover .tile{color:var(--on-accent)}
+
+@media (min-width:1200px){
+  .rail .rail__lock{display:flex}
+  /* Locked: lock and light mode sit side by side on the bottom row; the empty row is handed back to the options. */
+  html.rail-locked .rail__lock{transform:translateY(42px)}
+  html.rail-locked .rail__theme{transform:translateX(46px)}
+  html.rail-locked .rail__scroll{margin-bottom:-34px}
+  html.rail-locked .rail,html.rail-locked .rail:hover,html.rail-locked .rail:has(:focus-visible){width:var(--rail-open);border-right:2px solid var(--line)}
+  html.rail-locked .rail .lbl,html.rail-locked .rail .opt .sw{opacity:1;transition-delay:0s}
+}
+@media (prefers-reduced-motion:reduce){.rail .rail__tool{transition:none}}
