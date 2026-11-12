@@ -5,7 +5,7 @@
 // One-time DEVELOPER setup (users never see it): GOOGLE_CLIENT_ID below, and the Drive API + Google Sheets API enabled for that project.
 window.XSM = window.XSM || {};
 (function () {
-const GOOGLE_CLIENT_ID = '645258334003-0808o5ip74cb2230i4p2i6rls0k4duqv.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = '645258334003-f7n7c9m0a9lbf9qmlabsnbhnt986ageo.apps.googleusercontent.com';
 // The original template (docs.google.com/spreadsheets/d/<this id>/edit)
 const TEMPLATE_ID = '1IPYF8Vqd2MsBHJ3O1UjbDlUMZLpGYURDANIibIq0I30';
 const SCOPE = 'https://www.googleapis.com/auth/drive'; // needed to copy a file the app did not create
