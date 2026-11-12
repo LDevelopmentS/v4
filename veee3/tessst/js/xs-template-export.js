@@ -57,14 +57,18 @@ function mapFormToCells(formData) {
   formData.locations.slice(0, 5).forEach((loc, i) => { put(6 + i * 2, loc.city); put(7 + i * 2, loc.state); });
   if (formData.locations.length > 5) over.push(`City/State (${formData.locations.length - 5} over the template limit of 5)`);
 
-  if (formData.dobList.length) put(16, formData.dobList[0].full);
-  if (formData.dobList.length > 1) over.push('Date of Birth (template has 1 slot, first one used)');
-  if (formData.dateOfLossList.length) put(37, formData.dateOfLossList[0].full);
-  if (formData.dateOfLossList.length > 1) over.push('Date of Loss (template has 1 slot, first one used)');
+  // The template has one cell each for date of birth and date of loss: extra dates are kept in the same cell, separated by "; "
+  if (formData.dobList.length) put(16, formData.dobList.map(d => d.full).join('; '));
+  if (formData.dateOfLossList.length) put(37, formData.dateOfLossList.map(d => d.full).join('; '));
 
   fill('Employment', formData.employers, 17, 10);
   fill('School', formData.schools, 27, 10);
-  fill('Alias', formData.aliasEntries.filter(a => a.type !== 'username').map(a => a.value), 38, 10);
+  // Aliases = aliases typed in the app, then the checked name combinations the template does not already build from First / Middle / Last
+  const [fn, mn, ln] = parts.length === 1 ? [parts[0]] : parts.length === 2 ? [parts[0], '', parts[1]] : [parts[0], parts.slice(1, -1).join(' '), parts[parts.length - 1]];
+  const covered = new Set([[fn, mn, ln], [fn, ln], [mn, ln], [fn, mn]].map(a => a.filter(Boolean).join(' ').toLowerCase()));
+  const typedAliases = formData.aliasEntries.filter(a => a.type !== 'username').map(a => a.value);
+  const nameCombos = (formData.nameVariantsList || []).filter(v => !covered.has(String(v).trim().toLowerCase()));
+  fill('Alias', window.XSM['xs-core'].dedupe([...typedAliases, ...nameCombos]), 38, 10);
   fill('Phone', formData.phones, 48, 10, formatPhone);
   fill('Email', formData.emails, 58, 20);
   // Usernames = the part before "@" of every email (same as the generator), then usernames typed in as aliases; duplicates dropped

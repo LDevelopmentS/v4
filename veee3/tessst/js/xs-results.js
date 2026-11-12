@@ -191,7 +191,7 @@ function renderResults(querySets, formData) {
   gsBtn.type = 'button';
   gsBtn.className = 'export-btn';
   gsBtn.textContent = 'Copy to Google Sheets';
-  gsBtn.title = 'Creates the same workbook as Export to Excel directly in your Google Drive as a Google Sheet, and opens it';
+  gsBtn.title = 'Makes a copy of the original Google Sheet in your Google Drive, filled with these details (formulas stay live), and opens it';
   gsBtn.addEventListener('click', () => { window.XSM['xs-results-last'] = querySets; window.XSM['xs-gsheets'].copyToGoogleSheets(formData, gsBtn); });
   filterRow.append(filterInput, expandToggle, exportBtn, gsBtn);
   bar.appendChild(filterRow);

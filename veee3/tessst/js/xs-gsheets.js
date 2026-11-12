@@ -1,15 +1,15 @@
-// Classic script (no ES modules). "Copy to Google Sheets": builds the same "<Name> - Searchstrings.xlsx" as Export to Excel and uploads
-// it to the signed-in person's own Google Drive, converted to a Google Sheet, then opens it. No pasting.
-// Uses Google Identity Services (token flow) + Drive API with the narrow scope drive.file (the app can only touch files it creates).
-// One-time DEVELOPER setup: paste the OAuth "Web application" Client ID into GOOGLE_CLIENT_ID below, once, before publishing the tool.
-// Users never see or enter it - they just click the button and sign in to Google.
+// Classic script (no ES modules). "Copy to Google Sheets": makes a copy of the ORIGINAL Google Sheets template in the signed-in
+// person's own Google Drive, titled "<Name> - Searchstrings", fills the 'Search String' inputs with what was entered in the app and opens it.
+// Because it is a real copy of the original, every formula keeps working: editing 'Search String' updates URLSource and AutoURL live.
+// Uses Google Identity Services (token flow) + Drive API + Sheets API.
+// One-time DEVELOPER setup (users never see it): GOOGLE_CLIENT_ID below, and the Drive API + Google Sheets API enabled for that project.
 window.XSM = window.XSM || {};
 (function () {
-const GOOGLE_CLIENT_ID = '645258334003-0808o5ip74cb2230i4p2i6rls0k4duqv.apps.googleusercontent.com';
-const SCOPE = 'https://www.googleapis.com/auth/drive.file';
+const GOOGLE_CLIENT_ID = '';
+// The original template (docs.google.com/spreadsheets/d/<this id>/edit)
+const TEMPLATE_ID = '880877839462-felvda3vdlssqbcms9j27vsi03bagukb.apps.googleusercontent.com';
+const SCOPE = 'https://www.googleapis.com/auth/drive'; // needed to copy a file the app did not create
 const GIS_SRC = 'https://accounts.google.com/gsi/client';
-const SHEET_MIME = 'application/vnd.google-apps.spreadsheet';
-const XLSX_MIME = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 let token = null, tokenExpires = 0, gisPromise = null;
 
@@ -43,19 +43,31 @@ function getToken(id) {
   }));
 }
 
-async function uploadAsSheet(blob, title, accessToken) {
-  const boundary = 'xs' + Math.random().toString(16).slice(2);
-  const meta = JSON.stringify({ name: title, mimeType: SHEET_MIME });
-  const body = new Blob([
-    `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n`,
-    `--${boundary}\r\nContent-Type: ${XLSX_MIME}\r\n\r\n`, blob, `\r\n--${boundary}--`
-  ]);
-  const r = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink', {
-    method: 'POST', headers: { Authorization: 'Bearer ' + accessToken, 'Content-Type': `multipart/related; boundary=${boundary}` }, body
-  });
+async function gfetch(url, accessToken, opts = {}) {
+  const r = await fetch(url, { ...opts, headers: { Authorization: 'Bearer ' + accessToken, 'Content-Type': 'application/json', ...(opts.headers || {}) } });
   if (r.status === 401) token = null;
-  if (!r.ok) { let m = ''; try { m = (await r.json()).error.message; } catch { /* ignore */ } throw new Error(m || `Google Drive upload failed (${r.status}).`); }
+  if (!r.ok) {
+    let m = ''; try { m = (await r.json()).error.message; } catch { /* ignore */ }
+    throw new Error(m || `Google request failed (${r.status}).`);
+  }
   return r.json();
+}
+
+// The template's three "copy all" text boxes (Search String E4 / I4 / M4) are fed by Sort!C2 / F2 / I2. The original formulas skip some
+// rows and repeat others (A10 and A12 missing, A13 three times), so replace them with a join of every string.
+const SORT_FIXES = [['Sort!C2', 'A'], ['Sort!F2', 'D'], ['Sort!I2', 'G']];
+
+async function makeSheetFromTemplate(title, cells, accessToken) {
+  const copy = await gfetch(`https://www.googleapis.com/drive/v3/files/${TEMPLATE_ID}/copy?fields=id`, accessToken, { method: 'POST', body: JSON.stringify({ name: title }) });
+  const id = copy.id;
+  const values = [];
+  for (let r = 3; r <= 97; r++) values.push([cells['C' + r] || '']);
+  const base = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values`;
+  await gfetch(`${base}/${encodeURIComponent("'Search String'!C3:C97")}?valueInputOption=RAW`, accessToken, { method: 'PUT', body: JSON.stringify({ range: "'Search String'!C3:C97", majorDimension: 'ROWS', values }) });
+  try {
+    await gfetch(`${base}:batchUpdate`, accessToken, { method: 'POST', body: JSON.stringify({ valueInputOption: 'USER_ENTERED', data: SORT_FIXES.map(([range, col]) => ({ range, values: [[`=TEXTJOIN(CHAR(10),TRUE,${col}2:${col}1053)`]] })) }) });
+  } catch { /* the sheet is already usable without this refinement */ }
+  return id;
 }
 
 // Shows a persistent "Open in Google Sheets" link (popup blockers can stop an automatic open after sign-in)
@@ -74,13 +86,13 @@ async function copyToGoogleSheets(formData, btn) {
   const label = btn ? btn.textContent : '';
   try {
     if (btn) { btn.disabled = true; btn.textContent = 'Sending to Google…'; }
-    const { blob, over } = ex.buildSearchstringsBlob(formData, window.XSM['xs-results-last'] || null);
+    const { cells, over } = ex.mapFormToCells(formData);
     const accessToken = await getToken(id);
-    const file = await uploadAsSheet(blob, title, accessToken);
-    const url = `https://docs.google.com/spreadsheets/d/${file.id}/edit`;
+    const sheetId = await makeSheetFromTemplate(title, cells, accessToken);
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/edit`;
     if (btn) showLink(btn, url, title);
     window.open(url, '_blank', 'noopener');
-    showToast(over.length ? `Created "${title}" in your Google Drive. Not all fit the template: ${over.join('; ')}` : `Created "${title}" in your Google Drive`);
+    showToast(over.length ? `Created "${title}" in your Google Drive from the original template. Not all fit the template: ${over.join('; ')}` : `Created "${title}" in your Google Drive from the original template`);
     return { ok: true, url };
   } catch (e) {
     showToast(e.message || 'Could not create the Google Sheet');

@@ -354,7 +354,7 @@ function readSubject() {
 
   return {
     queryInput: { nameVariantsList, aliases, aliasUsernames, locations, phones, emails, employers, schools, dobList, dateOfLossList },
-    formData: { fullName, mergeLast: isMergeLast(), locations, phones, emails, employers, schools, dobList, dateOfLossList, aliasEntries }
+    formData: { fullName, mergeLast: isMergeLast(), nameVariantsList, locations, phones, emails, employers, schools, dobList, dateOfLossList, aliasEntries }
   };
 }
 

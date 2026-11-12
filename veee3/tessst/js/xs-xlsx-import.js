@@ -82,14 +82,18 @@ async function readSearchStringColumn(file) {
 
 // Template rows (column C): 3 First, 4 Middle, 5 Last | 6-15 City/State x5 | 16 DOB | 17-26 Employment | 27-36 School
 // 37 DOI | 38-47 Alias | 48-57 Phone | 58-77 Email | 78-97 Username
+const splitDates = v => (v ? String(v).split(/\s*[;\n]\s*/).filter(Boolean).map(raw => ({ raw })) : []);
 function columnToState(col) {
   const range = (a, b) => { const r = []; for (let i = a; i <= b; i++) if (col[i]) r.push(col[i]); return r; };
   const emails = range(58, 77);
   const emailUsers = new Set(emails.map(e => e.split('@')[0].trim().toLowerCase()));
   const locations = [];
   for (let i = 0; i < 5; i++) if (col[6 + i * 2] || col[7 + i * 2]) locations.push({ city: col[6 + i * 2] || '', state: col[7 + i * 2] || '' });
+  // Name combinations written into the Alias rows by the export are rebuilt by the app from the full name, so do not load them as aliases
+  const core = window.XSM['xs-core'], fullName = [col[3], col[4], col[5]].filter(Boolean).join(' ');
+  const generated = new Set(core && fullName ? [...core.nameVariants(fullName, false), ...core.nameVariants(fullName, true)].map(v => v.toLowerCase()) : []);
   const aliases = [
-    ...range(38, 47).map(v => ({ value: v, type: 'alias' })),
+    ...range(38, 47).filter(v => !generated.has(v.toLowerCase())).map(v => ({ value: v, type: 'alias' })),
     // usernames that are just the part before the "@" of an email are re-added automatically by the generator
     ...range(78, 97).filter(v => !emailUsers.has(v.toLowerCase())).map(v => ({ value: v, type: 'username' }))
   ];
@@ -97,8 +101,8 @@ function columnToState(col) {
     version: 1,
     fullName: [col[3], col[4], col[5]].filter(Boolean).join(' '),
     mergeLastName: false,
-    dateOfBirth: col[16] ? [{ raw: col[16] }] : [],
-    dateOfLoss: col[37] ? [{ raw: col[37] }] : [],
+    dateOfBirth: splitDates(col[16]),
+    dateOfLoss: splitDates(col[37]),
     locations,
     phones: range(48, 57),
     emails,
